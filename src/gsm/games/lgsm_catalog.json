@@ -1,0 +1,1986 @@
+{
+  "lgsm-rust": {
+    "server_code": "rustserver",
+    "display_name": "Rust (LinuxGSM)",
+    "ports": [
+      {
+        "port": 28015,
+        "protocol": "udp"
+      },
+      {
+        "port": 28016,
+        "protocol": "tcp"
+      },
+      {
+        "port": 28082,
+        "protocol": "tcp"
+      }
+    ],
+    "default_instance_type": "m5.xlarge",
+    "min_ram_gb": 8,
+    "rcon_port": 28016,
+    "default_lgsm_config": {
+      "servername": "LinuxGSM Server",
+      "maxplayers": "50",
+      "rconpassword": "gsm-rcon"
+    }
+  },
+  "lgsm-csgo": {
+    "server_code": "csgoserver",
+    "display_name": "Counter-Strike: GO (LinuxGSM)",
+    "ports": [
+      {
+        "port": 27015,
+        "protocol": "udp"
+      },
+      {
+        "port": 27015,
+        "protocol": "tcp"
+      },
+      {
+        "port": 27020,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {
+      "servername": "LinuxGSM Server",
+      "maxplayers": "16"
+    }
+  },
+  "lgsm-gmod": {
+    "server_code": "gmodserver",
+    "display_name": "Garry's Mod (LinuxGSM)",
+    "ports": [
+      {
+        "port": 27015,
+        "protocol": "udp"
+      },
+      {
+        "port": 27015,
+        "protocol": "tcp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {
+      "servername": "LinuxGSM Server",
+      "maxplayers": "16"
+    }
+  },
+  "lgsm-arkse": {
+    "server_code": "arkserver",
+    "display_name": "ARK: Survival Evolved (LinuxGSM)",
+    "ports": [
+      {
+        "port": 7777,
+        "protocol": "udp"
+      },
+      {
+        "port": 7778,
+        "protocol": "udp"
+      },
+      {
+        "port": 27015,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "m5.xlarge",
+    "min_ram_gb": 16,
+    "rcon_port": null,
+    "default_lgsm_config": {
+      "servername": "LinuxGSM Server",
+      "maxplayers": "70"
+    }
+  },
+  "lgsm-tf2": {
+    "server_code": "tf2server",
+    "display_name": "Team Fortress 2 (LinuxGSM)",
+    "ports": [
+      {
+        "port": 27015,
+        "protocol": "udp"
+      },
+      {
+        "port": 27015,
+        "protocol": "tcp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {
+      "servername": "LinuxGSM Server",
+      "maxplayers": "24"
+    }
+  },
+  "lgsm-7dtd": {
+    "server_code": "sdtdserver",
+    "display_name": "7 Days to Die (LinuxGSM)",
+    "ports": [
+      {
+        "port": 26900,
+        "protocol": "tcp"
+      },
+      {
+        "port": 26900,
+        "protocol": "udp"
+      },
+      {
+        "port": 26901,
+        "protocol": "udp"
+      },
+      {
+        "port": 26902,
+        "protocol": "udp"
+      },
+      {
+        "port": 26903,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.large",
+    "min_ram_gb": 8,
+    "rcon_port": null,
+    "default_lgsm_config": {
+      "servername": "LinuxGSM Server",
+      "maxplayers": "8"
+    }
+  },
+  "lgsm-ac": {
+    "server_code": "acserver",
+    "display_name": "Assetto Corsa (LinuxGSM)",
+    "ports": [],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {}
+  },
+  "lgsm-ahl": {
+    "server_code": "ahlserver",
+    "display_name": "Action Half-Life (LinuxGSM)",
+    "ports": [
+      {
+        "port": 27015,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {
+      "maxplayers": "16"
+    }
+  },
+  "lgsm-ahl2": {
+    "server_code": "ahl2server",
+    "display_name": "Action: Source (LinuxGSM)",
+    "ports": [
+      {
+        "port": 27015,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {
+      "maxplayers": "20"
+    }
+  },
+  "lgsm-arma3": {
+    "server_code": "arma3server",
+    "display_name": "ARMA 3 (LinuxGSM)",
+    "ports": [
+      {
+        "port": 2302,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {}
+  },
+  "lgsm-armar": {
+    "server_code": "armarserver",
+    "display_name": "Arma Reforger (LinuxGSM)",
+    "ports": [],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {}
+  },
+  "lgsm-ats": {
+    "server_code": "atsserver",
+    "display_name": "American Truck Simulator (LinuxGSM)",
+    "ports": [],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {}
+  },
+  "lgsm-av": {
+    "server_code": "avserver",
+    "display_name": "Avorion (LinuxGSM)",
+    "ports": [],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {}
+  },
+  "lgsm-bb": {
+    "server_code": "bbserver",
+    "display_name": "BrainBread (LinuxGSM)",
+    "ports": [
+      {
+        "port": 27015,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {
+      "maxplayers": "16"
+    }
+  },
+  "lgsm-bb2": {
+    "server_code": "bb2server",
+    "display_name": "BrainBread 2 (LinuxGSM)",
+    "ports": [
+      {
+        "port": 27015,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {
+      "maxplayers": "20"
+    }
+  },
+  "lgsm-bd": {
+    "server_code": "bdserver",
+    "display_name": "Base Defense (LinuxGSM)",
+    "ports": [
+      {
+        "port": 27015,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {
+      "maxplayers": "3"
+    }
+  },
+  "lgsm-bf1942": {
+    "server_code": "bf1942server",
+    "display_name": "Battlefield 1942 (LinuxGSM)",
+    "ports": [],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {}
+  },
+  "lgsm-bfv": {
+    "server_code": "bfvserver",
+    "display_name": "Battlefield: Vietnam (LinuxGSM)",
+    "ports": [],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {}
+  },
+  "lgsm-bmdm": {
+    "server_code": "bmdmserver",
+    "display_name": "Black Mesa: Deathmatch (LinuxGSM)",
+    "ports": [
+      {
+        "port": 27015,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {
+      "maxplayers": "16"
+    }
+  },
+  "lgsm-bo": {
+    "server_code": "boserver",
+    "display_name": "Ballistic Overkill (LinuxGSM)",
+    "ports": [],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {}
+  },
+  "lgsm-bs": {
+    "server_code": "bsserver",
+    "display_name": "Blade Symphony (LinuxGSM)",
+    "ports": [
+      {
+        "port": 27015,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {
+      "maxplayers": "16"
+    }
+  },
+  "lgsm-bt": {
+    "server_code": "btserver",
+    "display_name": "Barotrauma (LinuxGSM)",
+    "ports": [],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {}
+  },
+  "lgsm-btl": {
+    "server_code": "btlserver",
+    "display_name": "BATTALION: Legacy (LinuxGSM)",
+    "ports": [
+      {
+        "port": 7777,
+        "protocol": "udp"
+      },
+      {
+        "port": 7780,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {}
+  },
+  "lgsm-cc": {
+    "server_code": "ccserver",
+    "display_name": "Codename CURE (LinuxGSM)",
+    "ports": [
+      {
+        "port": 27015,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {
+      "maxplayers": "6"
+    }
+  },
+  "lgsm-ck": {
+    "server_code": "ckserver",
+    "display_name": "Core Keeper (LinuxGSM)",
+    "ports": [
+      {
+        "port": 1234,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {}
+  },
+  "lgsm-cmw": {
+    "server_code": "cmwserver",
+    "display_name": "Chivalry: Medieval Warfare (LinuxGSM)",
+    "ports": [
+      {
+        "port": 7777,
+        "protocol": "udp"
+      },
+      {
+        "port": 7779,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {}
+  },
+  "lgsm-cod": {
+    "server_code": "codserver",
+    "display_name": "Call of Duty (LinuxGSM)",
+    "ports": [
+      {
+        "port": 28960,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {
+      "maxplayers": "20"
+    }
+  },
+  "lgsm-cod2": {
+    "server_code": "cod2server",
+    "display_name": "Call of Duty 2 (LinuxGSM)",
+    "ports": [
+      {
+        "port": 28960,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {
+      "maxplayers": "20"
+    }
+  },
+  "lgsm-cod4": {
+    "server_code": "cod4server",
+    "display_name": "Call of Duty 4 (LinuxGSM)",
+    "ports": [
+      {
+        "port": 28960,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {
+      "maxplayers": "32"
+    }
+  },
+  "lgsm-coduo": {
+    "server_code": "coduoserver",
+    "display_name": "Call of Duty: United Offensive (LinuxGSM)",
+    "ports": [
+      {
+        "port": 28960,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {
+      "maxplayers": "20"
+    }
+  },
+  "lgsm-codwaw": {
+    "server_code": "codwawserver",
+    "display_name": "Call of Duty: World at War (LinuxGSM)",
+    "ports": [
+      {
+        "port": 28960,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {
+      "maxplayers": "20"
+    }
+  },
+  "lgsm-col": {
+    "server_code": "colserver",
+    "display_name": "Colony Survival (LinuxGSM)",
+    "ports": [],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {}
+  },
+  "lgsm-cs": {
+    "server_code": "csserver",
+    "display_name": "Counter-Strike 1.6 (LinuxGSM)",
+    "ports": [
+      {
+        "port": 27015,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {
+      "maxplayers": "16"
+    }
+  },
+  "lgsm-cs2": {
+    "server_code": "cs2server",
+    "display_name": "Counter-Strike 2 (LinuxGSM)",
+    "ports": [
+      {
+        "port": 27015,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {
+      "maxplayers": "16"
+    }
+  },
+  "lgsm-cscz": {
+    "server_code": "csczserver",
+    "display_name": "Counter-Strike: Condition Zero (LinuxGSM)",
+    "ports": [
+      {
+        "port": 27015,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {
+      "maxplayers": "16"
+    }
+  },
+  "lgsm-css": {
+    "server_code": "cssserver",
+    "display_name": "Counter-Strike: Source (LinuxGSM)",
+    "ports": [
+      {
+        "port": 27015,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {
+      "maxplayers": "16"
+    }
+  },
+  "lgsm-ct": {
+    "server_code": "ctserver",
+    "display_name": "Craftopia (LinuxGSM)",
+    "ports": [],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {}
+  },
+  "lgsm-dab": {
+    "server_code": "dabserver",
+    "display_name": "Double Action: Boogaloo (LinuxGSM)",
+    "ports": [
+      {
+        "port": 27015,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {
+      "maxplayers": "10"
+    }
+  },
+  "lgsm-dayz": {
+    "server_code": "dayzserver",
+    "display_name": "DayZ (LinuxGSM)",
+    "ports": [
+      {
+        "port": 2302,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {}
+  },
+  "lgsm-dmc": {
+    "server_code": "dmcserver",
+    "display_name": "Deathmatch Classic (LinuxGSM)",
+    "ports": [
+      {
+        "port": 27015,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {
+      "maxplayers": "16"
+    }
+  },
+  "lgsm-dod": {
+    "server_code": "dodserver",
+    "display_name": "Day of Defeat (LinuxGSM)",
+    "ports": [
+      {
+        "port": 27015,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {
+      "maxplayers": "16"
+    }
+  },
+  "lgsm-dodr": {
+    "server_code": "dodrserver",
+    "display_name": "Day of Dragons (LinuxGSM)",
+    "ports": [
+      {
+        "port": 7777,
+        "protocol": "udp"
+      },
+      {
+        "port": 27015,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {
+      "servername": "LinuxGSM"
+    }
+  },
+  "lgsm-dods": {
+    "server_code": "dodsserver",
+    "display_name": "Day of Defeat: Source (LinuxGSM)",
+    "ports": [
+      {
+        "port": 27015,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {
+      "maxplayers": "16"
+    }
+  },
+  "lgsm-doi": {
+    "server_code": "doiserver",
+    "display_name": "Day of Infamy (LinuxGSM)",
+    "ports": [
+      {
+        "port": 27015,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {
+      "maxplayers": "32"
+    }
+  },
+  "lgsm-dst": {
+    "server_code": "dstserver",
+    "display_name": "Don't Starve Together (LinuxGSM)",
+    "ports": [],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {}
+  },
+  "lgsm-dys": {
+    "server_code": "dysserver",
+    "display_name": "Dystopia (LinuxGSM)",
+    "ports": [
+      {
+        "port": 27015,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {
+      "maxplayers": "16"
+    }
+  },
+  "lgsm-eco": {
+    "server_code": "ecoserver",
+    "display_name": "Eco (LinuxGSM)",
+    "ports": [],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {}
+  },
+  "lgsm-em": {
+    "server_code": "emserver",
+    "display_name": "Empires Mod (LinuxGSM)",
+    "ports": [
+      {
+        "port": 27015,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {
+      "maxplayers": "62"
+    }
+  },
+  "lgsm-etl": {
+    "server_code": "etlserver",
+    "display_name": "ET: Legacy (LinuxGSM)",
+    "ports": [],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {}
+  },
+  "lgsm-ets2": {
+    "server_code": "ets2server",
+    "display_name": "Euro Truck Simulator 2 (LinuxGSM)",
+    "ports": [],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {}
+  },
+  "lgsm-fctr": {
+    "server_code": "fctrserver",
+    "display_name": "Factorio (LinuxGSM)",
+    "ports": [
+      {
+        "port": 34197,
+        "protocol": "udp"
+      },
+      {
+        "port": 34198,
+        "protocol": "tcp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": 34198,
+    "default_lgsm_config": {}
+  },
+  "lgsm-fof": {
+    "server_code": "fofserver",
+    "display_name": "Fistful of Frags (LinuxGSM)",
+    "ports": [
+      {
+        "port": 27015,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {
+      "maxplayers": "20"
+    }
+  },
+  "lgsm-hcu": {
+    "server_code": "hcuserver",
+    "display_name": "HYPERCHARGE: Unboxed (LinuxGSM)",
+    "ports": [
+      {
+        "port": 7777,
+        "protocol": "udp"
+      },
+      {
+        "port": 27015,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {
+      "servername": "LinuxGSM",
+      "maxplayers": "8"
+    }
+  },
+  "lgsm-hl2dm": {
+    "server_code": "hl2dmserver",
+    "display_name": "Half-Life 2: Deathmatch (LinuxGSM)",
+    "ports": [
+      {
+        "port": 27015,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {
+      "maxplayers": "16"
+    }
+  },
+  "lgsm-hldm": {
+    "server_code": "hldmserver",
+    "display_name": "Half-Life: Deathmatch (LinuxGSM)",
+    "ports": [
+      {
+        "port": 27015,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {
+      "maxplayers": "16"
+    }
+  },
+  "lgsm-hldms": {
+    "server_code": "hldmsserver",
+    "display_name": "Half-Life Deathmatch: Source (LinuxGSM)",
+    "ports": [
+      {
+        "port": 27015,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {
+      "maxplayers": "16"
+    }
+  },
+  "lgsm-hw": {
+    "server_code": "hwserver",
+    "display_name": "Hurtworld (LinuxGSM)",
+    "ports": [
+      {
+        "port": 12871,
+        "protocol": "udp"
+      },
+      {
+        "port": 12881,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {
+      "servername": "LinuxGSM",
+      "maxplayers": "20"
+    }
+  },
+  "lgsm-hz": {
+    "server_code": "hzserver",
+    "display_name": "Humanitz (LinuxGSM)",
+    "ports": [
+      {
+        "port": 7777,
+        "protocol": "udp"
+      },
+      {
+        "port": 27015,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {}
+  },
+  "lgsm-ins": {
+    "server_code": "insserver",
+    "display_name": "Insurgency (LinuxGSM)",
+    "ports": [
+      {
+        "port": 27015,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {
+      "maxplayers": "32"
+    }
+  },
+  "lgsm-inss": {
+    "server_code": "inssserver",
+    "display_name": "Insurgency: Sandstorm (LinuxGSM)",
+    "ports": [
+      {
+        "port": 27102,
+        "protocol": "udp"
+      },
+      {
+        "port": 27131,
+        "protocol": "udp"
+      },
+      {
+        "port": 27015,
+        "protocol": "tcp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": 27015,
+    "default_lgsm_config": {
+      "servername": "LinuxGSM",
+      "maxplayers": "28"
+    }
+  },
+  "lgsm-ios": {
+    "server_code": "iosserver",
+    "display_name": "IOSoccer (LinuxGSM)",
+    "ports": [
+      {
+        "port": 27015,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {
+      "maxplayers": "32"
+    }
+  },
+  "lgsm-jc2": {
+    "server_code": "jc2server",
+    "display_name": "Just Cause 2 (LinuxGSM)",
+    "ports": [],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {}
+  },
+  "lgsm-jc3": {
+    "server_code": "jc3server",
+    "display_name": "Just Cause 3 (LinuxGSM)",
+    "ports": [],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {}
+  },
+  "lgsm-jk2": {
+    "server_code": "jk2server",
+    "display_name": "Jedi Knight II: Jedi Outcast (LinuxGSM)",
+    "ports": [
+      {
+        "port": 27960,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {}
+  },
+  "lgsm-kf": {
+    "server_code": "kfserver",
+    "display_name": "Killing Floor (LinuxGSM)",
+    "ports": [],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {}
+  },
+  "lgsm-kf2": {
+    "server_code": "kf2server",
+    "display_name": "Killing Floor 2 (LinuxGSM)",
+    "ports": [
+      {
+        "port": 27015,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {}
+  },
+  "lgsm-l4d": {
+    "server_code": "l4dserver",
+    "display_name": "Left 4 Dead (LinuxGSM)",
+    "ports": [
+      {
+        "port": 27015,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {
+      "maxplayers": "8"
+    }
+  },
+  "lgsm-l4d2": {
+    "server_code": "l4d2server",
+    "display_name": "Left 4 Dead 2 (LinuxGSM)",
+    "ports": [
+      {
+        "port": 27015,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {
+      "maxplayers": "8"
+    }
+  },
+  "lgsm-mc": {
+    "server_code": "mcserver",
+    "display_name": "Minecraft (LinuxGSM)",
+    "ports": [],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {}
+  },
+  "lgsm-mcb": {
+    "server_code": "mcbserver",
+    "display_name": "Minecraft Bedrock (LinuxGSM)",
+    "ports": [],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {}
+  },
+  "lgsm-mh": {
+    "server_code": "mhserver",
+    "display_name": "MORDHAU (LinuxGSM)",
+    "ports": [
+      {
+        "port": 7777,
+        "protocol": "udp"
+      },
+      {
+        "port": 27015,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {}
+  },
+  "lgsm-mohaa": {
+    "server_code": "mohaaserver",
+    "display_name": "Medal of Honor: Allied Assault (LinuxGSM)",
+    "ports": [
+      {
+        "port": 12203,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {}
+  },
+  "lgsm-mta": {
+    "server_code": "mtaserver",
+    "display_name": "Multi Theft Auto (LinuxGSM)",
+    "ports": [],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {}
+  },
+  "lgsm-nd": {
+    "server_code": "ndserver",
+    "display_name": "Nuclear Dawn (LinuxGSM)",
+    "ports": [
+      {
+        "port": 27015,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {
+      "maxplayers": "32"
+    }
+  },
+  "lgsm-nec": {
+    "server_code": "necserver",
+    "display_name": "Necesse (LinuxGSM)",
+    "ports": [],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {}
+  },
+  "lgsm-nmrih": {
+    "server_code": "nmrihserver",
+    "display_name": "No More Room in Hell (LinuxGSM)",
+    "ports": [
+      {
+        "port": 27015,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {
+      "maxplayers": "8"
+    }
+  },
+  "lgsm-ns": {
+    "server_code": "nsserver",
+    "display_name": "Natural Selection (LinuxGSM)",
+    "ports": [
+      {
+        "port": 27015,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {
+      "maxplayers": "16"
+    }
+  },
+  "lgsm-ns2": {
+    "server_code": "ns2server",
+    "display_name": "Natural Selection 2 (LinuxGSM)",
+    "ports": [
+      {
+        "port": 27015,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {
+      "servername": "LinuxGSM",
+      "maxplayers": "20"
+    }
+  },
+  "lgsm-ns2c": {
+    "server_code": "ns2cserver",
+    "display_name": "NS2: Combat (LinuxGSM)",
+    "ports": [
+      {
+        "port": 27015,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {
+      "servername": "LinuxGSM",
+      "maxplayers": "24"
+    }
+  },
+  "lgsm-ohd": {
+    "server_code": "ohdserver",
+    "display_name": "Operation: Harsh Doorstop (LinuxGSM)",
+    "ports": [
+      {
+        "port": 7777,
+        "protocol": "udp"
+      },
+      {
+        "port": 27005,
+        "protocol": "udp"
+      },
+      {
+        "port": 7778,
+        "protocol": "tcp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": 7778,
+    "default_lgsm_config": {
+      "servername": "LinuxGSM",
+      "maxplayers": "16"
+    }
+  },
+  "lgsm-onset": {
+    "server_code": "onsetserver",
+    "display_name": "Onset (LinuxGSM)",
+    "ports": [],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {}
+  },
+  "lgsm-opfor": {
+    "server_code": "opforserver",
+    "display_name": "Opposing Force (LinuxGSM)",
+    "ports": [
+      {
+        "port": 27015,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {
+      "maxplayers": "16"
+    }
+  },
+  "lgsm-pc": {
+    "server_code": "pcserver",
+    "display_name": "Project Cars (LinuxGSM)",
+    "ports": [],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {}
+  },
+  "lgsm-pc2": {
+    "server_code": "pc2server",
+    "display_name": "Project Cars 2 (LinuxGSM)",
+    "ports": [],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {}
+  },
+  "lgsm-pmc": {
+    "server_code": "pmcserver",
+    "display_name": "PaperMC (LinuxGSM)",
+    "ports": [],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {}
+  },
+  "lgsm-pvkii": {
+    "server_code": "pvkiiserver",
+    "display_name": "Pirates Vikings & Knights II (LinuxGSM)",
+    "ports": [
+      {
+        "port": 27015,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {
+      "maxplayers": "24"
+    }
+  },
+  "lgsm-pvr": {
+    "server_code": "pvrserver",
+    "display_name": "Pavlov VR (LinuxGSM)",
+    "ports": [
+      {
+        "port": 7777,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {}
+  },
+  "lgsm-pw": {
+    "server_code": "pwserver",
+    "display_name": "Palworld (LinuxGSM)",
+    "ports": [
+      {
+        "port": 8211,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {
+      "servername": "LinuxGSM"
+    }
+  },
+  "lgsm-pz": {
+    "server_code": "pzserver",
+    "display_name": "Project Zomboid (LinuxGSM)",
+    "ports": [],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {}
+  },
+  "lgsm-q2": {
+    "server_code": "q2server",
+    "display_name": "Quake 2 (LinuxGSM)",
+    "ports": [
+      {
+        "port": 27910,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {}
+  },
+  "lgsm-q3": {
+    "server_code": "q3server",
+    "display_name": "Quake 3: Arena (LinuxGSM)",
+    "ports": [
+      {
+        "port": 27960,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {}
+  },
+  "lgsm-q4": {
+    "server_code": "q4server",
+    "display_name": "Quake 4 (LinuxGSM)",
+    "ports": [
+      {
+        "port": 28004,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {}
+  },
+  "lgsm-ql": {
+    "server_code": "qlserver",
+    "display_name": "Quake Live (LinuxGSM)",
+    "ports": [],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {}
+  },
+  "lgsm-qw": {
+    "server_code": "qwserver",
+    "display_name": "Quake World (LinuxGSM)",
+    "ports": [
+      {
+        "port": 27500,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {}
+  },
+  "lgsm-ricochet": {
+    "server_code": "ricochetserver",
+    "display_name": "Ricochet (LinuxGSM)",
+    "ports": [
+      {
+        "port": 27015,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {
+      "maxplayers": "16"
+    }
+  },
+  "lgsm-ro": {
+    "server_code": "roserver",
+    "display_name": "Red Orchestra: Ostfront 41-45 (LinuxGSM)",
+    "ports": [],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {}
+  },
+  "lgsm-rtcw": {
+    "server_code": "rtcwserver",
+    "display_name": "Return to Castle Wolfenstein (LinuxGSM)",
+    "ports": [
+      {
+        "port": 27960,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {}
+  },
+  "lgsm-rw": {
+    "server_code": "rwserver",
+    "display_name": "Rising World (LinuxGSM)",
+    "ports": [],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {}
+  },
+  "lgsm-samp": {
+    "server_code": "sampserver",
+    "display_name": "San Andreas Multiplayer (LinuxGSM)",
+    "ports": [
+      {
+        "port": 7777,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {}
+  },
+  "lgsm-sb": {
+    "server_code": "sbserver",
+    "display_name": "Starbound (LinuxGSM)",
+    "ports": [],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {}
+  },
+  "lgsm-sbots": {
+    "server_code": "sbotsserver",
+    "display_name": "StickyBots (LinuxGSM)",
+    "ports": [
+      {
+        "port": 7777,
+        "protocol": "udp"
+      },
+      {
+        "port": 27015,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {
+      "servername": "LinuxGSM"
+    }
+  },
+  "lgsm-scpsl": {
+    "server_code": "scpslserver",
+    "display_name": "SCP: Secret Laboratory (LinuxGSM)",
+    "ports": [
+      {
+        "port": 7777,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {}
+  },
+  "lgsm-scpslsm": {
+    "server_code": "scpslsmserver",
+    "display_name": "SCP: Secret Laboratory ServerMod (LinuxGSM)",
+    "ports": [
+      {
+        "port": 7777,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {}
+  },
+  "lgsm-sf": {
+    "server_code": "sfserver",
+    "display_name": "Satisfactory (LinuxGSM)",
+    "ports": [
+      {
+        "port": 7777,
+        "protocol": "udp"
+      },
+      {
+        "port": 15777,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {}
+  },
+  "lgsm-sfc": {
+    "server_code": "sfcserver",
+    "display_name": "SourceForts Classic (LinuxGSM)",
+    "ports": [
+      {
+        "port": 27015,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {
+      "maxplayers": "32"
+    }
+  },
+  "lgsm-sm": {
+    "server_code": "smserver",
+    "display_name": "Soulmask (LinuxGSM)",
+    "ports": [
+      {
+        "port": 8777,
+        "protocol": "udp"
+      },
+      {
+        "port": 27015,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {
+      "servername": "LinuxGSM",
+      "maxplayers": "50"
+    }
+  },
+  "lgsm-sof2": {
+    "server_code": "sof2server",
+    "display_name": "Soldier Of Fortune 2: Gold Edition (LinuxGSM)",
+    "ports": [
+      {
+        "port": 20100,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {}
+  },
+  "lgsm-sol": {
+    "server_code": "solserver",
+    "display_name": "Soldat (LinuxGSM)",
+    "ports": [],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {}
+  },
+  "lgsm-squad": {
+    "server_code": "squadserver",
+    "display_name": "Squad (LinuxGSM)",
+    "ports": [
+      {
+        "port": 7787,
+        "protocol": "udp"
+      },
+      {
+        "port": 27165,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {}
+  },
+  "lgsm-squad44": {
+    "server_code": "squad44server",
+    "display_name": "Squad 44 (LinuxGSM)",
+    "ports": [
+      {
+        "port": 10027,
+        "protocol": "udp"
+      },
+      {
+        "port": 10037,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {}
+  },
+  "lgsm-st": {
+    "server_code": "stserver",
+    "display_name": "Stationeers (LinuxGSM)",
+    "ports": [],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {}
+  },
+  "lgsm-stn": {
+    "server_code": "stnserver",
+    "display_name": "Survive the Nights (LinuxGSM)",
+    "ports": [],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {
+      "maxplayers": "20"
+    }
+  },
+  "lgsm-sven": {
+    "server_code": "svenserver",
+    "display_name": "Sven Co-op (LinuxGSM)",
+    "ports": [
+      {
+        "port": 27015,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {
+      "maxplayers": "16"
+    }
+  },
+  "lgsm-terraria": {
+    "server_code": "terrariaserver",
+    "display_name": "Terraria (LinuxGSM)",
+    "ports": [],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {}
+  },
+  "lgsm-tf": {
+    "server_code": "tfserver",
+    "display_name": "The Front (LinuxGSM)",
+    "ports": [
+      {
+        "port": 5001,
+        "protocol": "udp"
+      },
+      {
+        "port": 27015,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {
+      "servername": "LinuxGSM",
+      "maxplayers": "40"
+    }
+  },
+  "lgsm-tfc": {
+    "server_code": "tfcserver",
+    "display_name": "Team Fortress Classic (LinuxGSM)",
+    "ports": [
+      {
+        "port": 27015,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {
+      "maxplayers": "16"
+    }
+  },
+  "lgsm-ti": {
+    "server_code": "tiserver",
+    "display_name": "The Isle (LinuxGSM)",
+    "ports": [
+      {
+        "port": 7777,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {}
+  },
+  "lgsm-ts": {
+    "server_code": "tsserver",
+    "display_name": "The Specialists (LinuxGSM)",
+    "ports": [
+      {
+        "port": 27015,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {
+      "maxplayers": "32"
+    }
+  },
+  "lgsm-ts3": {
+    "server_code": "ts3server",
+    "display_name": "Teamspeak 3 (LinuxGSM)",
+    "ports": [],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {}
+  },
+  "lgsm-tu": {
+    "server_code": "tuserver",
+    "display_name": "Tower Unite (LinuxGSM)",
+    "ports": [
+      {
+        "port": 7777,
+        "protocol": "udp"
+      },
+      {
+        "port": 27015,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {}
+  },
+  "lgsm-tw": {
+    "server_code": "twserver",
+    "display_name": "Teeworlds (LinuxGSM)",
+    "ports": [],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {}
+  },
+  "lgsm-unt": {
+    "server_code": "untserver",
+    "display_name": "Unturned (LinuxGSM)",
+    "ports": [
+      {
+        "port": 27015,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {
+      "servername": "LinuxGSM",
+      "maxplayers": "20"
+    }
+  },
+  "lgsm-ut": {
+    "server_code": "utserver",
+    "display_name": "Unreal Tournament (LinuxGSM)",
+    "ports": [
+      {
+        "port": 7777,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {}
+  },
+  "lgsm-ut2k4": {
+    "server_code": "ut2k4server",
+    "display_name": "Unreal Tournament 2004 (LinuxGSM)",
+    "ports": [],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {}
+  },
+  "lgsm-ut3": {
+    "server_code": "ut3server",
+    "display_name": "Unreal Tournament 3 (LinuxGSM)",
+    "ports": [
+      {
+        "port": 7777,
+        "protocol": "udp"
+      },
+      {
+        "port": 6500,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {}
+  },
+  "lgsm-ut99": {
+    "server_code": "ut99server",
+    "display_name": "Unreal Tournament 99 (LinuxGSM)",
+    "ports": [],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {}
+  },
+  "lgsm-vh": {
+    "server_code": "vhserver",
+    "display_name": "Valheim (LinuxGSM)",
+    "ports": [
+      {
+        "port": 2456,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {
+      "servername": "LinuxGSM"
+    }
+  },
+  "lgsm-vints": {
+    "server_code": "vintsserver",
+    "display_name": "Vintage Story (LinuxGSM)",
+    "ports": [],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {}
+  },
+  "lgsm-vpmc": {
+    "server_code": "vpmcserver",
+    "display_name": "Velocity Proxy MC (LinuxGSM)",
+    "ports": [],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {}
+  },
+  "lgsm-vs": {
+    "server_code": "vsserver",
+    "display_name": "Vampire Slayer (LinuxGSM)",
+    "ports": [
+      {
+        "port": 27015,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {
+      "maxplayers": "16"
+    }
+  },
+  "lgsm-wet": {
+    "server_code": "wetserver",
+    "display_name": "Wolfenstein: Enemy Territory (LinuxGSM)",
+    "ports": [],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {}
+  },
+  "lgsm-wf": {
+    "server_code": "wfserver",
+    "display_name": "Warfork (LinuxGSM)",
+    "ports": [
+      {
+        "port": 44400,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {}
+  },
+  "lgsm-wmc": {
+    "server_code": "wmcserver",
+    "display_name": "WaterfallMC (LinuxGSM)",
+    "ports": [],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {}
+  },
+  "lgsm-wurm": {
+    "server_code": "wurmserver",
+    "display_name": "Wurm Unlimited (LinuxGSM)",
+    "ports": [
+      {
+        "port": 3724,
+        "protocol": "udp"
+      },
+      {
+        "port": 27016,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {
+      "servername": "LinuxGSM",
+      "maxplayers": "200"
+    }
+  },
+  "lgsm-xnt": {
+    "server_code": "xntserver",
+    "display_name": "Xonotic (LinuxGSM)",
+    "ports": [],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {}
+  },
+  "lgsm-zmr": {
+    "server_code": "zmrserver",
+    "display_name": "Zombie Master: Reborn (LinuxGSM)",
+    "ports": [
+      {
+        "port": 27015,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {
+      "maxplayers": "16"
+    }
+  },
+  "lgsm-zps": {
+    "server_code": "zpsserver",
+    "display_name": "Zombie Panic! Source (LinuxGSM)",
+    "ports": [
+      {
+        "port": 27015,
+        "protocol": "udp"
+      }
+    ],
+    "default_instance_type": "t3.medium",
+    "min_ram_gb": 2,
+    "rcon_port": null,
+    "default_lgsm_config": {
+      "maxplayers": "20"
+    }
+  }
+}

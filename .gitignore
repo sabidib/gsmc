@@ -1,0 +1,40 @@
+# Python
+__pycache__
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+*.egg
+.python-version
+
+# Virtual environment
+.venv/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# mypy / type checking
+.mypy_cache/
+
+# Claude Code
+.claude/
+
+# User-generated config files
+*.cfg
+
+# GSM local state (user-specific)
+# ~/.gsm/ is already outside the repo

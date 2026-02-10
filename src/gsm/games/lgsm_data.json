@@ -1,0 +1,3218 @@
+{
+  "_generated": "2026-02-09T02:45:13.494879+00:00",
+  "_source": "https://github.com/GameServerManagers/LinuxGSM",
+  "games": {
+    "acserver": {
+      "shortname": "ac",
+      "gamename": "Assetto Corsa",
+      "config_options": {
+        "steamuser": {
+          "default": "username",
+          "description": ""
+        }
+      }
+    },
+    "ahl2server": {
+      "shortname": "ahl2",
+      "gamename": "Action: Source",
+      "config_options": {
+        "steamuser": {
+          "default": "username",
+          "description": ""
+        },
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "27015",
+          "description": ""
+        },
+        "clientport": {
+          "default": "27005",
+          "description": ""
+        },
+        "sourcetvport": {
+          "default": "27020",
+          "description": ""
+        },
+        "defaultmap": {
+          "default": "act_airport",
+          "description": ""
+        },
+        "maxplayers": {
+          "default": "20",
+          "description": ""
+        }
+      }
+    },
+    "ahlserver": {
+      "shortname": "ahl",
+      "gamename": "Action Half-Life",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "27015",
+          "description": ""
+        },
+        "clientport": {
+          "default": "27005",
+          "description": ""
+        },
+        "defaultmap": {
+          "default": "ahl_hydro",
+          "description": ""
+        },
+        "maxplayers": {
+          "default": "16",
+          "description": ""
+        }
+      }
+    },
+    "arkserver": {
+      "shortname": "ark",
+      "gamename": "ARK: Survival Evolved",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "7777",
+          "description": ""
+        },
+        "queryport": {
+          "default": "27015",
+          "description": ""
+        },
+        "defaultmap": {
+          "default": "TheIsland",
+          "description": ""
+        },
+        "altsavedirectoryname": {
+          "default": "${defaultmap}",
+          "description": ""
+        }
+      }
+    },
+    "arma3server": {
+      "shortname": "arma3",
+      "gamename": "ARMA 3",
+      "config_options": {
+        "steamuser": {
+          "default": "username",
+          "description": ""
+        },
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "2302",
+          "description": ""
+        },
+        "mods": {
+          "default": "",
+          "description": ""
+        },
+        "servermods": {
+          "default": "",
+          "description": ""
+        },
+        "bepath": {
+          "default": "",
+          "description": ""
+        }
+      }
+    },
+    "armarserver": {
+      "shortname": "armar",
+      "gamename": "Arma Reforger",
+      "config_options": {
+        "maxfps": {
+          "default": "60",
+          "description": ""
+        },
+        "serverprofile": {
+          "default": "server",
+          "description": ""
+        },
+        "serverprofilefullpath": {
+          "default": "${serverfiles}/profiles/${serverprofile}",
+          "description": ""
+        }
+      }
+    },
+    "atsserver": {
+      "shortname": "ats",
+      "gamename": "American Truck Simulator",
+      "config_options": {}
+    },
+    "avserver": {
+      "shortname": "av",
+      "gamename": "Avorion",
+      "config_options": {}
+    },
+    "bb2server": {
+      "shortname": "bb2",
+      "gamename": "BrainBread 2",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "27015",
+          "description": ""
+        },
+        "clientport": {
+          "default": "27005",
+          "description": ""
+        },
+        "sourcetvport": {
+          "default": "27020",
+          "description": ""
+        },
+        "defaultmap": {
+          "default": "bba_barracks",
+          "description": ""
+        },
+        "maxplayers": {
+          "default": "20",
+          "description": ""
+        },
+        "gslt": {
+          "default": "",
+          "description": ""
+        }
+      }
+    },
+    "bbserver": {
+      "shortname": "bb",
+      "gamename": "BrainBread",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "27015",
+          "description": ""
+        },
+        "clientport": {
+          "default": "27005",
+          "description": ""
+        },
+        "defaultmap": {
+          "default": "bb_chp4_slaywatch",
+          "description": ""
+        },
+        "maxplayers": {
+          "default": "16",
+          "description": ""
+        }
+      }
+    },
+    "bdserver": {
+      "shortname": "bd",
+      "gamename": "Base Defense",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "27015",
+          "description": ""
+        },
+        "clientport": {
+          "default": "27005",
+          "description": ""
+        },
+        "defaultmap": {
+          "default": "pve_tomb",
+          "description": ""
+        },
+        "maxplayers": {
+          "default": "3",
+          "description": ""
+        }
+      }
+    },
+    "bf1942server": {
+      "shortname": "bf1942",
+      "gamename": "Battlefield 1942",
+      "config_options": {}
+    },
+    "bfvserver": {
+      "shortname": "bfv",
+      "gamename": "Battlefield: Vietnam",
+      "config_options": {}
+    },
+    "bmdmserver": {
+      "shortname": "bmdm",
+      "gamename": "Black Mesa: Deathmatch",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "27015",
+          "description": ""
+        },
+        "clientport": {
+          "default": "27005",
+          "description": ""
+        },
+        "sourcetvport": {
+          "default": "27020",
+          "description": ""
+        },
+        "defaultmap": {
+          "default": "dm_bounce",
+          "description": ""
+        },
+        "maxplayers": {
+          "default": "16",
+          "description": ""
+        },
+        "gslt": {
+          "default": "",
+          "description": ""
+        }
+      }
+    },
+    "boserver": {
+      "shortname": "bo",
+      "gamename": "Ballistic Overkill",
+      "config_options": {
+        "gslt": {
+          "default": "",
+          "description": ""
+        }
+      }
+    },
+    "bsserver": {
+      "shortname": "bs",
+      "gamename": "Blade Symphony",
+      "config_options": {
+        "steamuser": {
+          "default": "username",
+          "description": ""
+        },
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "27015",
+          "description": ""
+        },
+        "clientport": {
+          "default": "27005",
+          "description": ""
+        },
+        "sourcetvport": {
+          "default": "27020",
+          "description": ""
+        },
+        "defaultmap": {
+          "default": "duel_winter",
+          "description": ""
+        },
+        "maxplayers": {
+          "default": "16",
+          "description": ""
+        },
+        "gslt": {
+          "default": "",
+          "description": ""
+        }
+      }
+    },
+    "btlserver": {
+      "shortname": "btl",
+      "gamename": "BATTALION: Legacy",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "7777",
+          "description": ""
+        },
+        "queryport": {
+          "default": "7780",
+          "description": ""
+        }
+      }
+    },
+    "btserver": {
+      "shortname": "bt",
+      "gamename": "Barotrauma",
+      "config_options": {}
+    },
+    "ccserver": {
+      "shortname": "cc",
+      "gamename": "Codename CURE",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "27015",
+          "description": ""
+        },
+        "clientport": {
+          "default": "27005",
+          "description": ""
+        },
+        "sourcetvport": {
+          "default": "27020",
+          "description": ""
+        },
+        "defaultmap": {
+          "default": "cbe_bunker",
+          "description": ""
+        },
+        "maxplayers": {
+          "default": "6",
+          "description": ""
+        }
+      }
+    },
+    "ckserver": {
+      "shortname": "ck",
+      "gamename": "Core Keeper",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "1234",
+          "description": ""
+        }
+      }
+    },
+    "cmwserver": {
+      "shortname": "cmw",
+      "gamename": "Chivalry: Medieval Warfare",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "7777",
+          "description": ""
+        },
+        "queryport": {
+          "default": "7779",
+          "description": ""
+        },
+        "defaultmap": {
+          "default": "AOCTD-Frigid_p",
+          "description": ""
+        }
+      }
+    },
+    "cod2server": {
+      "shortname": "cod2",
+      "gamename": "Call of Duty 2",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "28960",
+          "description": ""
+        },
+        "defaultmap": {
+          "default": "mp_leningrad",
+          "description": ""
+        },
+        "maxplayers": {
+          "default": "20",
+          "description": ""
+        }
+      }
+    },
+    "cod4server": {
+      "shortname": "cod4",
+      "gamename": "Call of Duty 4",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "28960",
+          "description": ""
+        },
+        "defaultmap": {
+          "default": "mp_crossfire",
+          "description": ""
+        },
+        "maxplayers": {
+          "default": "32",
+          "description": ""
+        }
+      }
+    },
+    "codserver": {
+      "shortname": "cod",
+      "gamename": "Call of Duty",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "28960",
+          "description": ""
+        },
+        "defaultmap": {
+          "default": "mp_neuville",
+          "description": ""
+        },
+        "maxplayers": {
+          "default": "20",
+          "description": ""
+        }
+      }
+    },
+    "coduoserver": {
+      "shortname": "coduo",
+      "gamename": "Call of Duty: United Offensive",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "28960",
+          "description": ""
+        },
+        "defaultmap": {
+          "default": "mp_cassino",
+          "description": ""
+        },
+        "maxplayers": {
+          "default": "20",
+          "description": ""
+        }
+      }
+    },
+    "codwawserver": {
+      "shortname": "codwaw",
+      "gamename": "Call of Duty: World at War",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "28960",
+          "description": ""
+        },
+        "defaultmap": {
+          "default": "mp_castle",
+          "description": ""
+        },
+        "maxplayers": {
+          "default": "20",
+          "description": ""
+        }
+      }
+    },
+    "colserver": {
+      "shortname": "col",
+      "gamename": "Colony Survival",
+      "config_options": {}
+    },
+    "cs2server": {
+      "shortname": "cs2",
+      "gamename": "Counter-Strike 2",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "27015",
+          "description": ""
+        },
+        "maxplayers": {
+          "default": "16",
+          "description": ""
+        },
+        "wsapikey": {
+          "default": "",
+          "description": ""
+        },
+        "gslt": {
+          "default": "",
+          "description": ""
+        }
+      }
+    },
+    "csczserver": {
+      "shortname": "cscz",
+      "gamename": "Counter-Strike: Condition Zero",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "27015",
+          "description": ""
+        },
+        "clientport": {
+          "default": "27005",
+          "description": ""
+        },
+        "defaultmap": {
+          "default": "de_dust2",
+          "description": ""
+        },
+        "maxplayers": {
+          "default": "16",
+          "description": ""
+        }
+      }
+    },
+    "csgoserver": {
+      "shortname": "csgo",
+      "gamename": "Counter-Strike: Global Offensive",
+      "config_options": {
+        "gametype": {
+          "default": "0",
+          "description": ""
+        },
+        "gamemode": {
+          "default": "0",
+          "description": ""
+        },
+        "gamemodeflags": {
+          "default": "0",
+          "description": ""
+        },
+        "skirmishid": {
+          "default": "0",
+          "description": ""
+        },
+        "mapgroup": {
+          "default": "mg_active",
+          "description": ""
+        },
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "27015",
+          "description": ""
+        },
+        "clientport": {
+          "default": "27005",
+          "description": ""
+        },
+        "sourcetvport": {
+          "default": "27020",
+          "description": ""
+        },
+        "steamport": {
+          "default": "26901",
+          "description": ""
+        },
+        "defaultmap": {
+          "default": "de_mirage",
+          "description": ""
+        },
+        "maxplayers": {
+          "default": "16",
+          "description": ""
+        },
+        "tickrate": {
+          "default": "64",
+          "description": ""
+        },
+        "gslt": {
+          "default": "",
+          "description": ""
+        },
+        "wsapikey": {
+          "default": "",
+          "description": ""
+        },
+        "wscollectionid": {
+          "default": "",
+          "description": ""
+        },
+        "wsstartmap": {
+          "default": "",
+          "description": ""
+        }
+      }
+    },
+    "csserver": {
+      "shortname": "cs",
+      "gamename": "Counter-Strike 1.6",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "27015",
+          "description": ""
+        },
+        "clientport": {
+          "default": "27005",
+          "description": ""
+        },
+        "defaultmap": {
+          "default": "de_dust2",
+          "description": ""
+        },
+        "maxplayers": {
+          "default": "16",
+          "description": ""
+        }
+      }
+    },
+    "cssserver": {
+      "shortname": "css",
+      "gamename": "Counter-Strike: Source",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "27015",
+          "description": ""
+        },
+        "clientport": {
+          "default": "27005",
+          "description": ""
+        },
+        "sourcetvport": {
+          "default": "27020",
+          "description": ""
+        },
+        "defaultmap": {
+          "default": "de_dust2",
+          "description": ""
+        },
+        "maxplayers": {
+          "default": "16",
+          "description": ""
+        },
+        "gslt": {
+          "default": "",
+          "description": ""
+        }
+      }
+    },
+    "ctserver": {
+      "shortname": "ct",
+      "gamename": "Craftopia",
+      "config_options": {}
+    },
+    "dabserver": {
+      "shortname": "dab",
+      "gamename": "Double Action: Boogaloo",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "27015",
+          "description": ""
+        },
+        "clientport": {
+          "default": "27005",
+          "description": ""
+        },
+        "sourcetvport": {
+          "default": "27020",
+          "description": ""
+        },
+        "defaultmap": {
+          "default": "da_rooftops",
+          "description": ""
+        },
+        "maxplayers": {
+          "default": "10",
+          "description": ""
+        }
+      }
+    },
+    "dayzserver": {
+      "shortname": "dayz",
+      "gamename": "DayZ",
+      "config_options": {
+        "steamuser": {
+          "default": "username",
+          "description": ""
+        },
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "2302",
+          "description": ""
+        },
+        "mods": {
+          "default": "",
+          "description": ""
+        },
+        "servermods": {
+          "default": "",
+          "description": ""
+        },
+        "bepath": {
+          "default": "",
+          "description": ""
+        }
+      }
+    },
+    "dmcserver": {
+      "shortname": "dmc",
+      "gamename": "Deathmatch Classic",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "27015",
+          "description": ""
+        },
+        "clientport": {
+          "default": "27005",
+          "description": ""
+        },
+        "defaultmap": {
+          "default": "dcdm5",
+          "description": ""
+        },
+        "maxplayers": {
+          "default": "16",
+          "description": ""
+        }
+      }
+    },
+    "dodrserver": {
+      "shortname": "dodr",
+      "gamename": "Day of Dragons",
+      "config_options": {
+        "servername": {
+          "default": "LinuxGSM",
+          "description": ""
+        },
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "7777",
+          "description": ""
+        },
+        "queryport": {
+          "default": "27015",
+          "description": ""
+        }
+      }
+    },
+    "dodserver": {
+      "shortname": "dod",
+      "gamename": "Day of Defeat",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "27015",
+          "description": ""
+        },
+        "clientport": {
+          "default": "27005",
+          "description": ""
+        },
+        "defaultmap": {
+          "default": "dod_Anzio",
+          "description": ""
+        },
+        "maxplayers": {
+          "default": "16",
+          "description": ""
+        }
+      }
+    },
+    "dodsserver": {
+      "shortname": "dods",
+      "gamename": "Day of Defeat: Source",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "27015",
+          "description": ""
+        },
+        "clientport": {
+          "default": "27005",
+          "description": ""
+        },
+        "sourcetvport": {
+          "default": "27020",
+          "description": ""
+        },
+        "defaultmap": {
+          "default": "dod_Anzio",
+          "description": ""
+        },
+        "maxplayers": {
+          "default": "16",
+          "description": ""
+        }
+      }
+    },
+    "doiserver": {
+      "shortname": "doi",
+      "gamename": "Day of Infamy",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "27015",
+          "description": ""
+        },
+        "clientport": {
+          "default": "27005",
+          "description": ""
+        },
+        "sourcetvport": {
+          "default": "27020",
+          "description": ""
+        },
+        "defaultmap": {
+          "default": "bastogne stronghold",
+          "description": ""
+        },
+        "maxplayers": {
+          "default": "32",
+          "description": ""
+        },
+        "tickrate": {
+          "default": "64",
+          "description": ""
+        }
+      }
+    },
+    "dstserver": {
+      "shortname": "dst",
+      "gamename": "Don't Starve Together",
+      "config_options": {
+        "sharding": {
+          "default": "false",
+          "description": ""
+        },
+        "master": {
+          "default": "true",
+          "description": ""
+        },
+        "shard": {
+          "default": "Master",
+          "description": ""
+        },
+        "cluster": {
+          "default": "Cluster_1",
+          "description": ""
+        },
+        "cave": {
+          "default": "false",
+          "description": ""
+        },
+        "persistentstorageroot": {
+          "default": "${HOME}/.klei",
+          "description": ""
+        },
+        "confdir": {
+          "default": "DoNotStarveTogether",
+          "description": ""
+        }
+      }
+    },
+    "dysserver": {
+      "shortname": "dys",
+      "gamename": "Dystopia",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "27015",
+          "description": ""
+        },
+        "clientport": {
+          "default": "27005",
+          "description": ""
+        },
+        "sourcetvport": {
+          "default": "27020",
+          "description": ""
+        },
+        "defaultmap": {
+          "default": "dys_broadcast",
+          "description": ""
+        },
+        "maxplayers": {
+          "default": "16",
+          "description": ""
+        },
+        "gslt": {
+          "default": "",
+          "description": ""
+        }
+      }
+    },
+    "ecoserver": {
+      "shortname": "eco",
+      "gamename": "Eco",
+      "config_options": {
+        "usertoken": {
+          "default": "",
+          "description": ""
+        }
+      }
+    },
+    "emserver": {
+      "shortname": "em",
+      "gamename": "Empires Mod",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "27015",
+          "description": ""
+        },
+        "clientport": {
+          "default": "27005",
+          "description": ""
+        },
+        "sourcetvport": {
+          "default": "27020",
+          "description": ""
+        },
+        "defaultmap": {
+          "default": "con_district402",
+          "description": ""
+        },
+        "maxplayers": {
+          "default": "62",
+          "description": ""
+        },
+        "gslt": {
+          "default": "",
+          "description": ""
+        }
+      }
+    },
+    "etlserver": {
+      "shortname": "etl",
+      "gamename": "ET: Legacy",
+      "config_options": {}
+    },
+    "ets2server": {
+      "shortname": "ets2",
+      "gamename": "Euro Truck Simulator 2",
+      "config_options": {}
+    },
+    "fctrserver": {
+      "shortname": "fctr",
+      "gamename": "Factorio",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "34197",
+          "description": ""
+        },
+        "rconport": {
+          "default": "34198",
+          "description": ""
+        },
+        "rconpassword": {
+          "default": "CHANGE_ME",
+          "description": ""
+        },
+        "branch": {
+          "default": "stable",
+          "description": "values: stable, experimental"
+        }
+      }
+    },
+    "fofserver": {
+      "shortname": "fof",
+      "gamename": "Fistful of Frags",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "27015",
+          "description": ""
+        },
+        "clientport": {
+          "default": "27005",
+          "description": ""
+        },
+        "sourcetvport": {
+          "default": "27020",
+          "description": ""
+        },
+        "defaultmap": {
+          "default": "fof_depot",
+          "description": ""
+        },
+        "maxplayers": {
+          "default": "20",
+          "description": ""
+        }
+      }
+    },
+    "gmodserver": {
+      "shortname": "gmod",
+      "gamename": "Garrys Mod",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "27015",
+          "description": ""
+        },
+        "clientport": {
+          "default": "27005",
+          "description": ""
+        },
+        "sourcetvport": {
+          "default": "27020",
+          "description": ""
+        },
+        "defaultmap": {
+          "default": "gm_construct",
+          "description": ""
+        },
+        "maxplayers": {
+          "default": "16",
+          "description": ""
+        },
+        "tickrate": {
+          "default": "66",
+          "description": ""
+        },
+        "gamemode": {
+          "default": "sandbox",
+          "description": ""
+        },
+        "wscollectionid": {
+          "default": "",
+          "description": ""
+        },
+        "gslt": {
+          "default": "",
+          "description": ""
+        }
+      }
+    },
+    "hcuserver": {
+      "shortname": "hcu",
+      "gamename": "HYPERCHARGE: Unboxed",
+      "config_options": {
+        "defaultmap": {
+          "default": "KidsBedroom",
+          "description": ""
+        },
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "maxplayers": {
+          "default": "8",
+          "description": ""
+        },
+        "port": {
+          "default": "7777",
+          "description": ""
+        },
+        "queryport": {
+          "default": "27015",
+          "description": ""
+        },
+        "servername": {
+          "default": "LinuxGSM",
+          "description": ""
+        }
+      }
+    },
+    "hl2dmserver": {
+      "shortname": "hl2dm",
+      "gamename": "Half-Life 2: Deathmatch",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "27015",
+          "description": ""
+        },
+        "clientport": {
+          "default": "27005",
+          "description": ""
+        },
+        "sourcetvport": {
+          "default": "27020",
+          "description": ""
+        },
+        "defaultmap": {
+          "default": "dm_lockdown",
+          "description": ""
+        },
+        "maxplayers": {
+          "default": "16",
+          "description": ""
+        }
+      }
+    },
+    "hldmserver": {
+      "shortname": "hldm",
+      "gamename": "Half-Life: Deathmatch",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "27015",
+          "description": ""
+        },
+        "clientport": {
+          "default": "27005",
+          "description": ""
+        },
+        "defaultmap": {
+          "default": "crossfire",
+          "description": ""
+        },
+        "maxplayers": {
+          "default": "16",
+          "description": ""
+        }
+      }
+    },
+    "hldmsserver": {
+      "shortname": "hldms",
+      "gamename": "Half-Life Deathmatch: Source",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "27015",
+          "description": ""
+        },
+        "clientport": {
+          "default": "27005",
+          "description": ""
+        },
+        "sourcetvport": {
+          "default": "27020",
+          "description": ""
+        },
+        "defaultmap": {
+          "default": "crossfire",
+          "description": ""
+        },
+        "maxplayers": {
+          "default": "16",
+          "description": ""
+        }
+      }
+    },
+    "hwserver": {
+      "shortname": "hw",
+      "gamename": "Hurtworld",
+      "config_options": {
+        "servername": {
+          "default": "LinuxGSM",
+          "description": ""
+        },
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "12871",
+          "description": ""
+        },
+        "queryport": {
+          "default": "12881",
+          "description": ""
+        },
+        "maxplayers": {
+          "default": "20",
+          "description": ""
+        },
+        "defaultmap": {
+          "default": "nullius",
+          "description": ""
+        },
+        "creativemode": {
+          "default": "0",
+          "description": "values: Free Build = 1, Survival = 0"
+        },
+        "admins": {
+          "default": "",
+          "description": ""
+        },
+        "loadsave": {
+          "default": "",
+          "description": ""
+        }
+      }
+    },
+    "hzserver": {
+      "shortname": "hz",
+      "gamename": "Humanitz",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "7777",
+          "description": ""
+        },
+        "queryport": {
+          "default": "27015",
+          "description": ""
+        }
+      }
+    },
+    "insserver": {
+      "shortname": "ins",
+      "gamename": "Insurgency",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "27015",
+          "description": ""
+        },
+        "clientport": {
+          "default": "27005",
+          "description": ""
+        },
+        "sourcetvport": {
+          "default": "27020",
+          "description": ""
+        },
+        "defaultmap": {
+          "default": "embassy_coop checkpoint",
+          "description": ""
+        },
+        "maxplayers": {
+          "default": "32",
+          "description": ""
+        },
+        "tickrate": {
+          "default": "64",
+          "description": ""
+        },
+        "gslt": {
+          "default": "",
+          "description": ""
+        }
+      }
+    },
+    "inssserver": {
+      "shortname": "inss",
+      "gamename": "Insurgency: Sandstorm",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "27102",
+          "description": ""
+        },
+        "queryport": {
+          "default": "27131",
+          "description": ""
+        },
+        "rconport": {
+          "default": "27015",
+          "description": ""
+        },
+        "rconpassword": {
+          "default": "CHANGE_ME",
+          "description": ""
+        },
+        "servername": {
+          "default": "LinuxGSM",
+          "description": ""
+        },
+        "defaultmap": {
+          "default": "Oilfield",
+          "description": ""
+        },
+        "defaultscenario": {
+          "default": "Scenario_Refinery_Push_Security",
+          "description": ""
+        },
+        "maxplayers": {
+          "default": "28",
+          "description": ""
+        },
+        "gslt": {
+          "default": "",
+          "description": ""
+        }
+      }
+    },
+    "iosserver": {
+      "shortname": "ios",
+      "gamename": "IOSoccer",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "27015",
+          "description": ""
+        },
+        "clientport": {
+          "default": "27005",
+          "description": ""
+        },
+        "sourcetvport": {
+          "default": "27020",
+          "description": ""
+        },
+        "defaultmap": {
+          "default": "8v8_vienna",
+          "description": ""
+        },
+        "maxplayers": {
+          "default": "32",
+          "description": ""
+        }
+      }
+    },
+    "jc2server": {
+      "shortname": "jc2",
+      "gamename": "Just Cause 2",
+      "config_options": {}
+    },
+    "jc3server": {
+      "shortname": "jc3",
+      "gamename": "Just Cause 3",
+      "config_options": {}
+    },
+    "jk2server": {
+      "shortname": "jk2",
+      "gamename": "Jedi Knight II: Jedi Outcast",
+      "config_options": {
+        "steamuser": {
+          "default": "username",
+          "description": ""
+        },
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "27960",
+          "description": ""
+        },
+        "defaultmap": {
+          "default": "ffa_bespin",
+          "description": ""
+        }
+      }
+    },
+    "kf2server": {
+      "shortname": "kf2",
+      "gamename": "Killing Floor 2",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "queryport": {
+          "default": "27015",
+          "description": ""
+        },
+        "defaultmap": {
+          "default": "KF-BioticsLab",
+          "description": ""
+        },
+        "gamemode": {
+          "default": "KFGameContent.KFGameInfo_VersusSurvival",
+          "description": ""
+        }
+      }
+    },
+    "kfserver": {
+      "shortname": "kf",
+      "gamename": "Killing Floor",
+      "config_options": {
+        "steamuser": {
+          "default": "username",
+          "description": ""
+        },
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "defaultmap": {
+          "default": "KF-BioticsLab.rom",
+          "description": ""
+        }
+      }
+    },
+    "l4d2server": {
+      "shortname": "l4d2",
+      "gamename": "Left 4 Dead 2",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "27015",
+          "description": ""
+        },
+        "clientport": {
+          "default": "27005",
+          "description": ""
+        },
+        "defaultmap": {
+          "default": "c5m1_waterfront",
+          "description": ""
+        },
+        "maxplayers": {
+          "default": "8",
+          "description": ""
+        }
+      }
+    },
+    "l4dserver": {
+      "shortname": "l4d",
+      "gamename": "Left 4 Dead",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "27015",
+          "description": ""
+        },
+        "clientport": {
+          "default": "27005",
+          "description": ""
+        },
+        "defaultmap": {
+          "default": "l4d_hospital01_apartment",
+          "description": ""
+        },
+        "maxplayers": {
+          "default": "8",
+          "description": ""
+        }
+      }
+    },
+    "mcbserver": {
+      "shortname": "mcb",
+      "gamename": "Minecraft Bedrock",
+      "config_options": {
+        "mcversion": {
+          "default": "latest",
+          "description": ""
+        }
+      }
+    },
+    "mcserver": {
+      "shortname": "mc",
+      "gamename": "Minecraft",
+      "config_options": {
+        "javaram": {
+          "default": "1024",
+          "description": "-Xmx$1024M"
+        },
+        "branch": {
+          "default": "release",
+          "description": ""
+        },
+        "mcversion": {
+          "default": "latest",
+          "description": ""
+        }
+      }
+    },
+    "mhserver": {
+      "shortname": "mh",
+      "gamename": "MORDHAU",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "7777",
+          "description": ""
+        },
+        "beaconport": {
+          "default": "15000",
+          "description": ""
+        },
+        "queryport": {
+          "default": "27015",
+          "description": ""
+        },
+        "defaultmap": {
+          "default": "FFA_ThePit",
+          "description": ""
+        }
+      }
+    },
+    "mohaaserver": {
+      "shortname": "mohaa",
+      "gamename": "Medal of Honor: Allied Assault",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "12203",
+          "description": ""
+        },
+        "defaultmap": {
+          "default": "dm/mohdm1",
+          "description": ""
+        }
+      }
+    },
+    "mtaserver": {
+      "shortname": "mta",
+      "gamename": "Multi Theft Auto",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        }
+      }
+    },
+    "ndserver": {
+      "shortname": "nd",
+      "gamename": "Nuclear Dawn",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "27015",
+          "description": ""
+        },
+        "clientport": {
+          "default": "27005",
+          "description": ""
+        },
+        "sourcetvport": {
+          "default": "27020",
+          "description": ""
+        },
+        "defaultmap": {
+          "default": "hydro",
+          "description": ""
+        },
+        "maxplayers": {
+          "default": "32",
+          "description": ""
+        }
+      }
+    },
+    "necserver": {
+      "shortname": "nec",
+      "gamename": "Necesse",
+      "config_options": {
+        "worldname": {
+          "default": "MyWorld",
+          "description": ""
+        }
+      }
+    },
+    "nmrihserver": {
+      "shortname": "nmrih",
+      "gamename": "No More Room in Hell",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "27015",
+          "description": ""
+        },
+        "clientport": {
+          "default": "27005",
+          "description": ""
+        },
+        "sourcetvport": {
+          "default": "27020",
+          "description": ""
+        },
+        "defaultmap": {
+          "default": "nmo_broadway",
+          "description": ""
+        },
+        "maxplayers": {
+          "default": "8",
+          "description": ""
+        },
+        "gslt": {
+          "default": "",
+          "description": ""
+        }
+      }
+    },
+    "ns2cserver": {
+      "shortname": "ns2c",
+      "gamename": "NS2: Combat",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "27015",
+          "description": ""
+        },
+        "defaultmap": {
+          "default": "co_core",
+          "description": ""
+        },
+        "maxplayers": {
+          "default": "24",
+          "description": ""
+        },
+        "servername": {
+          "default": "LinuxGSM",
+          "description": ""
+        },
+        "httpuser": {
+          "default": "admin",
+          "description": ""
+        },
+        "httppassword": {
+          "default": "CHANGE_ME",
+          "description": ""
+        },
+        "httpport": {
+          "default": "8080",
+          "description": ""
+        },
+        "mods": {
+          "default": "",
+          "description": ""
+        },
+        "serverpassword": {
+          "default": "",
+          "description": ""
+        }
+      }
+    },
+    "ns2server": {
+      "shortname": "ns2",
+      "gamename": "Natural Selection 2",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "27015",
+          "description": ""
+        },
+        "defaultmap": {
+          "default": "ns2_summit",
+          "description": ""
+        },
+        "maxplayers": {
+          "default": "20",
+          "description": ""
+        },
+        "maxspectators": {
+          "default": "5",
+          "description": ""
+        },
+        "servername": {
+          "default": "LinuxGSM",
+          "description": ""
+        },
+        "httpuser": {
+          "default": "admin",
+          "description": ""
+        },
+        "httppassword": {
+          "default": "CHANGE_ME",
+          "description": ""
+        },
+        "httpport": {
+          "default": "8080",
+          "description": ""
+        },
+        "modserverport": {
+          "default": "27031",
+          "description": ""
+        },
+        "serverpassword": {
+          "default": "",
+          "description": ""
+        }
+      }
+    },
+    "nsserver": {
+      "shortname": "ns",
+      "gamename": "Natural Selection",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "27015",
+          "description": ""
+        },
+        "clientport": {
+          "default": "27005",
+          "description": ""
+        },
+        "defaultmap": {
+          "default": "ns_hera",
+          "description": ""
+        },
+        "maxplayers": {
+          "default": "16",
+          "description": ""
+        }
+      }
+    },
+    "ohdserver": {
+      "shortname": "ohd",
+      "gamename": "Operation: Harsh Doorstop",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "7777",
+          "description": ""
+        },
+        "queryport": {
+          "default": "27005",
+          "description": ""
+        },
+        "rconport": {
+          "default": "7778",
+          "description": ""
+        },
+        "servername": {
+          "default": "LinuxGSM",
+          "description": ""
+        },
+        "defaultmap": {
+          "default": "AAS-TestMap",
+          "description": ""
+        },
+        "maxplayers": {
+          "default": "16",
+          "description": ""
+        }
+      }
+    },
+    "onsetserver": {
+      "shortname": "onset",
+      "gamename": "Onset",
+      "config_options": {}
+    },
+    "opforserver": {
+      "shortname": "opfor",
+      "gamename": "Opposing Force",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "27015",
+          "description": ""
+        },
+        "clientport": {
+          "default": "27005",
+          "description": ""
+        },
+        "defaultmap": {
+          "default": "op4_bootcamp",
+          "description": ""
+        },
+        "maxplayers": {
+          "default": "16",
+          "description": ""
+        }
+      }
+    },
+    "pc2server": {
+      "shortname": "pc2",
+      "gamename": "Project Cars 2",
+      "config_options": {
+        "steamuser": {
+          "default": "username",
+          "description": ""
+        }
+      }
+    },
+    "pcserver": {
+      "shortname": "pc",
+      "gamename": "Project Cars",
+      "config_options": {}
+    },
+    "pmcserver": {
+      "shortname": "pmc",
+      "gamename": "PaperMC",
+      "config_options": {
+        "javaram": {
+          "default": "1024",
+          "description": "-Xmx$1024M"
+        },
+        "mcversion": {
+          "default": "latest",
+          "description": ""
+        }
+      }
+    },
+    "pvkiiserver": {
+      "shortname": "pvkii",
+      "gamename": "Pirates Vikings & Knights II",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "27015",
+          "description": ""
+        },
+        "clientport": {
+          "default": "27005",
+          "description": ""
+        },
+        "sourcetvport": {
+          "default": "27020",
+          "description": ""
+        },
+        "defaultmap": {
+          "default": "bt_island",
+          "description": ""
+        },
+        "maxplayers": {
+          "default": "24",
+          "description": ""
+        }
+      }
+    },
+    "pvrserver": {
+      "shortname": "pvr",
+      "gamename": "Pavlov VR",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "7777",
+          "description": ""
+        },
+        "defaultmap": {
+          "default": "datacenter",
+          "description": ""
+        },
+        "apikey": {
+          "default": "",
+          "description": ""
+        }
+      }
+    },
+    "pwserver": {
+      "shortname": "pw",
+      "gamename": "Palworld",
+      "config_options": {
+        "servername": {
+          "default": "LinuxGSM",
+          "description": ""
+        },
+        "port": {
+          "default": "8211",
+          "description": ""
+        },
+        "steamport": {
+          "default": "27015",
+          "description": ""
+        }
+      }
+    },
+    "pzserver": {
+      "shortname": "pz",
+      "gamename": "Project Zomboid",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "adminpassword": {
+          "default": "CHANGE_ME",
+          "description": ""
+        }
+      }
+    },
+    "q2server": {
+      "shortname": "q2",
+      "gamename": "Quake 2",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "27910",
+          "description": ""
+        },
+        "defaultmap": {
+          "default": "q2dm1",
+          "description": ""
+        }
+      }
+    },
+    "q3server": {
+      "shortname": "q3",
+      "gamename": "Quake 3: Arena",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "27960",
+          "description": ""
+        },
+        "defaultmap": {
+          "default": "q3dm17",
+          "description": ""
+        }
+      }
+    },
+    "q4server": {
+      "shortname": "q4",
+      "gamename": "Quake 4",
+      "config_options": {
+        "steamuser": {
+          "default": "username",
+          "description": ""
+        },
+        "port": {
+          "default": "28004",
+          "description": ""
+        }
+      }
+    },
+    "qlserver": {
+      "shortname": "ql",
+      "gamename": "Quake Live",
+      "config_options": {}
+    },
+    "qwserver": {
+      "shortname": "qw",
+      "gamename": "Quake World",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "27500",
+          "description": ""
+        }
+      }
+    },
+    "ricochetserver": {
+      "shortname": "ricochet",
+      "gamename": "Ricochet",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "27015",
+          "description": ""
+        },
+        "clientport": {
+          "default": "27005",
+          "description": ""
+        },
+        "defaultmap": {
+          "default": "rc_arena",
+          "description": ""
+        },
+        "maxplayers": {
+          "default": "16",
+          "description": ""
+        }
+      }
+    },
+    "roserver": {
+      "shortname": "ro",
+      "gamename": "Red Orchestra: Ostfront 41-45",
+      "config_options": {
+        "steamuser": {
+          "default": "username",
+          "description": ""
+        },
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "defaultmap": {
+          "default": "RO-Arad.rom",
+          "description": ""
+        }
+      }
+    },
+    "rtcwserver": {
+      "shortname": "rtcw",
+      "gamename": "Return to Castle Wolfenstein",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "27960",
+          "description": ""
+        },
+        "defaultmap": {
+          "default": "mp_beach",
+          "description": ""
+        }
+      }
+    },
+    "rustserver": {
+      "shortname": "rust",
+      "gamename": "Rust",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "28015",
+          "description": ""
+        },
+        "rconport": {
+          "default": "28016",
+          "description": ""
+        },
+        "appport": {
+          "default": "28082",
+          "description": ""
+        },
+        "queryport": {
+          "default": "28017",
+          "description": ""
+        },
+        "rconpassword": {
+          "default": "CHANGE_ME",
+          "description": ""
+        },
+        "rconweb": {
+          "default": "1",
+          "description": "values: Facepunch web panel, Rustadmin desktop and Rustadmin Online = 1, Rusty = 0."
+        },
+        "servername": {
+          "default": "LinuxGSM",
+          "description": ""
+        },
+        "gamemode": {
+          "default": "vanilla",
+          "description": "values: vanilla, softcore ( Doc: https://wiki.facepunch.com/rust/server-gamemodes )"
+        },
+        "serverlevel": {
+          "default": "Procedural Map",
+          "description": "values: Procedural Map, Barren, HapisIsland, SavasIsland"
+        },
+        "customlevelurl": {
+          "default": "",
+          "description": "Custom level url. +server.levelurl \\\"${customlevelurl}\\\""
+        },
+        "seed": {
+          "default": "",
+          "description": "range: 1-2147483647, used to reproduce a procedural map."
+        },
+        "salt": {
+          "default": "",
+          "description": "range: unknown, used to recover a known setting from an existing map."
+        },
+        "maxplayers": {
+          "default": "50",
+          "description": ""
+        },
+        "worldsize": {
+          "default": "3000",
+          "description": "default: 3000, range: 1000-6000, map size in meters."
+        },
+        "saveinterval": {
+          "default": "300",
+          "description": "Auto-save in seconds."
+        },
+        "tickrate": {
+          "default": "30",
+          "description": "default: 30, range: 15-100."
+        },
+        "tags": {
+          "default": "",
+          "description": "values: monthly, biweekly, weekly, vanilla, hardcore, softcore, pve, roleplay, creative, minigame, training, battlefield, broyale, builds, NA, SA, EU, WA, EA, OC, AF ( Doc: https://wiki.facepunch.com/rust/server-browser-tags )"
+        }
+      }
+    },
+    "rwserver": {
+      "shortname": "rw",
+      "gamename": "Rising World",
+      "config_options": {}
+    },
+    "sampserver": {
+      "shortname": "samp",
+      "gamename": "San Andreas Multiplayer",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "7777",
+          "description": ""
+        }
+      }
+    },
+    "sbotsserver": {
+      "shortname": "sbots",
+      "gamename": "StickyBots",
+      "config_options": {
+        "port": {
+          "default": "7777",
+          "description": ""
+        },
+        "queryport": {
+          "default": "27015",
+          "description": ""
+        },
+        "defaultmap": {
+          "default": "StationKappa",
+          "description": ""
+        },
+        "servername": {
+          "default": "LinuxGSM",
+          "description": ""
+        }
+      }
+    },
+    "sbserver": {
+      "shortname": "sb",
+      "gamename": "Starbound",
+      "config_options": {
+        "steamuser": {
+          "default": "username",
+          "description": ""
+        },
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        }
+      }
+    },
+    "scpslserver": {
+      "shortname": "scpsl",
+      "gamename": "SCP: Secret Laboratory",
+      "config_options": {
+        "port": {
+          "default": "7777",
+          "description": ""
+        }
+      }
+    },
+    "scpslsmserver": {
+      "shortname": "scpslsm",
+      "gamename": "SCP: Secret Laboratory ServerMod",
+      "config_options": {
+        "port": {
+          "default": "7777",
+          "description": ""
+        }
+      }
+    },
+    "sdtdserver": {
+      "shortname": "sdtd",
+      "gamename": "7 Days to Die",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        }
+      }
+    },
+    "sfcserver": {
+      "shortname": "sfc",
+      "gamename": "SourceForts Classic",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "27015",
+          "description": ""
+        },
+        "clientport": {
+          "default": "27005",
+          "description": ""
+        },
+        "sourcetvport": {
+          "default": "27020",
+          "description": ""
+        },
+        "defaultmap": {
+          "default": "sf_astrodome",
+          "description": ""
+        },
+        "maxplayers": {
+          "default": "32",
+          "description": ""
+        }
+      }
+    },
+    "sfserver": {
+      "shortname": "sf",
+      "gamename": "Satisfactory",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "queryport": {
+          "default": "15777",
+          "description": ""
+        },
+        "beaconport": {
+          "default": "15000",
+          "description": ""
+        },
+        "reliableport": {
+          "default": "8888",
+          "description": ""
+        },
+        "port": {
+          "default": "7777",
+          "description": ""
+        }
+      }
+    },
+    "smserver": {
+      "shortname": "sm",
+      "gamename": "Soulmask",
+      "config_options": {
+        "servername": {
+          "default": "LinuxGSM",
+          "description": ""
+        },
+        "serverpassword": {
+          "default": "",
+          "description": ""
+        },
+        "adminpassword": {
+          "default": "",
+          "description": ""
+        },
+        "port": {
+          "default": "8777",
+          "description": ""
+        },
+        "queryport": {
+          "default": "27015",
+          "description": ""
+        },
+        "telnetport": {
+          "default": "18888",
+          "description": ""
+        },
+        "maxplayers": {
+          "default": "50",
+          "description": ""
+        },
+        "backupinterval": {
+          "default": "15",
+          "description": "Backup interval in minutes."
+        },
+        "defaultmap": {
+          "default": "Level01_Main",
+          "description": ""
+        }
+      }
+    },
+    "sof2server": {
+      "shortname": "sof2",
+      "gamename": "Soldier Of Fortune 2: Gold Edition",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "20100",
+          "description": ""
+        },
+        "defaultmap": {
+          "default": "mp_shop",
+          "description": ""
+        }
+      }
+    },
+    "solserver": {
+      "shortname": "sol",
+      "gamename": "Soldat",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "maplist": {
+          "default": "mapslist.txt",
+          "description": ""
+        }
+      }
+    },
+    "squad44server": {
+      "shortname": "squad44",
+      "gamename": "Squad 44",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "10027",
+          "description": ""
+        },
+        "queryport": {
+          "default": "10037",
+          "description": ""
+        }
+      }
+    },
+    "squadserver": {
+      "shortname": "squad",
+      "gamename": "Squad",
+      "config_options": {
+        "port": {
+          "default": "7787",
+          "description": ""
+        },
+        "queryport": {
+          "default": "27165",
+          "description": ""
+        }
+      }
+    },
+    "stnserver": {
+      "shortname": "stn",
+      "gamename": "Survive the Nights",
+      "config_options": {
+        "maxplayers": {
+          "default": "20",
+          "description": ""
+        },
+        "region": {
+          "default": "0",
+          "description": ""
+        }
+      }
+    },
+    "stserver": {
+      "shortname": "st",
+      "gamename": "Stationeers",
+      "config_options": {
+        "worldsave": {
+          "default": "moon_save",
+          "description": ""
+        },
+        "worldtype": {
+          "default": "Moon",
+          "description": ""
+        }
+      }
+    },
+    "svenserver": {
+      "shortname": "sven",
+      "gamename": "Sven Co-op",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "27015",
+          "description": ""
+        },
+        "clientport": {
+          "default": "27005",
+          "description": ""
+        },
+        "defaultmap": {
+          "default": "svencoop1",
+          "description": ""
+        },
+        "maxplayers": {
+          "default": "16",
+          "description": ""
+        }
+      }
+    },
+    "terrariaserver": {
+      "shortname": "terraria",
+      "gamename": "Terraria",
+      "config_options": {
+        "steamuser": {
+          "default": "username",
+          "description": ""
+        },
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        }
+      }
+    },
+    "tf2server": {
+      "shortname": "tf2",
+      "gamename": "Team Fortress 2",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "27015",
+          "description": ""
+        },
+        "clientport": {
+          "default": "27005",
+          "description": ""
+        },
+        "sourcetvport": {
+          "default": "27020",
+          "description": ""
+        },
+        "defaultmap": {
+          "default": "cp_badlands",
+          "description": ""
+        },
+        "maxplayers": {
+          "default": "16",
+          "description": ""
+        },
+        "gslt": {
+          "default": "",
+          "description": ""
+        }
+      }
+    },
+    "tfcserver": {
+      "shortname": "tfc",
+      "gamename": "Team Fortress Classic",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "27015",
+          "description": ""
+        },
+        "clientport": {
+          "default": "27005",
+          "description": ""
+        },
+        "defaultmap": {
+          "default": "dustbowl",
+          "description": ""
+        },
+        "maxplayers": {
+          "default": "16",
+          "description": ""
+        }
+      }
+    },
+    "tfserver": {
+      "shortname": "tf",
+      "gamename": "The Front",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "5001",
+          "description": ""
+        },
+        "beaconport": {
+          "default": "5002",
+          "description": ""
+        },
+        "shutdownport": {
+          "default": "5003",
+          "description": ""
+        },
+        "queryport": {
+          "default": "27015",
+          "description": ""
+        },
+        "adminlabel": {
+          "default": "true",
+          "description": "Enable admin icon."
+        },
+        "allowsensitivewords": {
+          "default": "true",
+          "description": ""
+        },
+        "altsavedirectoryname": {
+          "default": "${defaultmap}",
+          "description": ""
+        },
+        "anticheat": {
+          "default": "true",
+          "description": ""
+        },
+        "damageself": {
+          "default": "true",
+          "description": ""
+        },
+        "damangeallies": {
+          "default": "true",
+          "description": ""
+        },
+        "gamemode": {
+          "default": "0",
+          "description": "0 = PvP; 1 = PvE"
+        },
+        "greenhand": {
+          "default": "true",
+          "description": ""
+        },
+        "maxplayers": {
+          "default": "40",
+          "description": ""
+        },
+        "maxqueuesize": {
+          "default": "50",
+          "description": ""
+        },
+        "queuevalidtime": {
+          "default": "120",
+          "description": ""
+        },
+        "saveinterval": {
+          "default": "300",
+          "description": "Auto-save in seconds."
+        },
+        "serveradmins": {
+          "default": "",
+          "description": "Use 17-digit Steam IDs separated by commas to grant admin privileges to players."
+        },
+        "servername": {
+          "default": "LinuxGSM",
+          "description": ""
+        },
+        "serverpassword": {
+          "default": "",
+          "description": ""
+        },
+        "servertags": {
+          "default": "LinuxGSM",
+          "description": ""
+        },
+        "steamsocket": {
+          "default": "0",
+          "description": "Use Steam Socket. 0 = off; 1 = on. Use Steam Servers for network penetration. Enable this if you don't have a public IP but you want to allow players from outside your network to join your server. If disabled, only you and other players on your LAN can join. If you have a public IP, you do not need to enable this."
+        }
+      }
+    },
+    "tiserver": {
+      "shortname": "ti",
+      "gamename": "The Isle",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "7777",
+          "description": ""
+        },
+        "defaultmap": {
+          "default": "/Game/TheIsle/Maps/Game/Gateway/Gateway",
+          "description": ""
+        }
+      }
+    },
+    "ts3server": {
+      "shortname": "ts3",
+      "gamename": "Teamspeak 3",
+      "config_options": {}
+    },
+    "tsserver": {
+      "shortname": "ts",
+      "gamename": "The Specialists",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "27015",
+          "description": ""
+        },
+        "clientport": {
+          "default": "27005",
+          "description": ""
+        },
+        "defaultmap": {
+          "default": "ts_neobaroque",
+          "description": ""
+        },
+        "maxplayers": {
+          "default": "32",
+          "description": ""
+        }
+      }
+    },
+    "tuserver": {
+      "shortname": "tu",
+      "gamename": "Tower Unite",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "7777",
+          "description": ""
+        },
+        "queryport": {
+          "default": "27015",
+          "description": ""
+        },
+        "gslt": {
+          "default": "",
+          "description": ""
+        }
+      }
+    },
+    "twserver": {
+      "shortname": "tw",
+      "gamename": "Teeworlds",
+      "config_options": {
+        "steamuser": {
+          "default": "username",
+          "description": ""
+        },
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        }
+      }
+    },
+    "untserver": {
+      "shortname": "unt",
+      "gamename": "Unturned",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "27015",
+          "description": ""
+        },
+        "maxplayers": {
+          "default": "20",
+          "description": ""
+        },
+        "defaultmap": {
+          "default": "PEI",
+          "description": ""
+        },
+        "servername": {
+          "default": "LinuxGSM",
+          "description": ""
+        },
+        "perspective": {
+          "default": "first",
+          "description": "values: first, third, vehicle, Both."
+        },
+        "gamemode": {
+          "default": "normal",
+          "description": "values: normal, easy, gold."
+        },
+        "gslt": {
+          "default": "",
+          "description": ""
+        }
+      }
+    },
+    "ut2k4server": {
+      "shortname": "ut2k4",
+      "gamename": "Unreal Tournament 2004",
+      "config_options": {
+        "defaultmap": {
+          "default": "DM-Rankin",
+          "description": ""
+        },
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        }
+      }
+    },
+    "ut3server": {
+      "shortname": "ut3",
+      "gamename": "Unreal Tournament 3",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "7777",
+          "description": ""
+        },
+        "queryport": {
+          "default": "6500",
+          "description": ""
+        },
+        "defaultmap": {
+          "default": "VCTF-Suspense",
+          "description": ""
+        },
+        "game": {
+          "default": "UTGameContent.UTVehicleCTFGame_Content",
+          "description": ""
+        },
+        "mutators": {
+          "default": "",
+          "description": ""
+        },
+        "isdedicated": {
+          "default": "true",
+          "description": ""
+        },
+        "islanmatch": {
+          "default": "false",
+          "description": ""
+        },
+        "usesstats": {
+          "default": "false",
+          "description": ""
+        },
+        "shouldadvertise": {
+          "default": "true",
+          "description": ""
+        },
+        "pureserver": {
+          "default": "1",
+          "description": ""
+        },
+        "allowjoininprogress": {
+          "default": "true",
+          "description": ""
+        },
+        "gsusername": {
+          "default": "",
+          "description": ""
+        },
+        "gspassword": {
+          "default": "",
+          "description": ""
+        }
+      }
+    },
+    "ut99server": {
+      "shortname": "ut99",
+      "gamename": "Unreal Tournament 99",
+      "config_options": {
+        "defaultmap": {
+          "default": "DM-Deck16][",
+          "description": ""
+        },
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        }
+      }
+    },
+    "utserver": {
+      "shortname": "ut",
+      "gamename": "Unreal Tournament",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "7777",
+          "description": ""
+        },
+        "defaultmap": {
+          "default": "DM-Underland",
+          "description": ""
+        },
+        "gametype": {
+          "default": "DM",
+          "description": ""
+        },
+        "timelimit": {
+          "default": "10",
+          "description": ""
+        }
+      }
+    },
+    "vhserver": {
+      "shortname": "vh",
+      "gamename": "Valheim",
+      "config_options": {
+        "servername": {
+          "default": "LinuxGSM",
+          "description": ""
+        },
+        "serverpassword": {
+          "default": "",
+          "description": "Minimum password length is 5."
+        },
+        "port": {
+          "default": "2456",
+          "description": ""
+        },
+        "worldname": {
+          "default": "${selfname}",
+          "description": ""
+        },
+        "public": {
+          "default": "1",
+          "description": ""
+        },
+        "savedir": {
+          "default": "$HOME/.config/unity3d/IronGate/Valheim",
+          "description": ""
+        },
+        "logFile": {
+          "default": "",
+          "description": ""
+        },
+        "saveinterval": {
+          "default": "1800",
+          "description": "Auto-save in seconds."
+        },
+        "backups": {
+          "default": "4",
+          "description": ""
+        },
+        "backupshort": {
+          "default": "7200",
+          "description": ""
+        },
+        "backuplong": {
+          "default": "43200",
+          "description": ""
+        },
+        "instanceid": {
+          "default": "1",
+          "description": ""
+        },
+        "worldmodifiers": {
+          "default": "",
+          "description": ""
+        }
+      }
+    },
+    "vintsserver": {
+      "shortname": "vints",
+      "gamename": "Vintage Story",
+      "config_options": {
+        "branch": {
+          "default": "stable",
+          "description": ""
+        }
+      }
+    },
+    "vpmcserver": {
+      "shortname": "vpmc",
+      "gamename": "Velocity Proxy MC",
+      "config_options": {
+        "javaram": {
+          "default": "1024",
+          "description": "-Xmx$1024M"
+        },
+        "mcversion": {
+          "default": "latest",
+          "description": ""
+        }
+      }
+    },
+    "vsserver": {
+      "shortname": "vs",
+      "gamename": "Vampire Slayer",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "27015",
+          "description": ""
+        },
+        "clientport": {
+          "default": "27005",
+          "description": ""
+        },
+        "defaultmap": {
+          "default": "vs_frost",
+          "description": ""
+        },
+        "maxplayers": {
+          "default": "16",
+          "description": ""
+        }
+      }
+    },
+    "wetserver": {
+      "shortname": "wet",
+      "gamename": "Wolfenstein: Enemy Territory",
+      "config_options": {}
+    },
+    "wfserver": {
+      "shortname": "wf",
+      "gamename": "Warfork",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "44400",
+          "description": ""
+        },
+        "httpport": {
+          "default": "44444",
+          "description": ""
+        }
+      }
+    },
+    "wmcserver": {
+      "shortname": "wmc",
+      "gamename": "WaterfallMC",
+      "config_options": {
+        "javaram": {
+          "default": "1024",
+          "description": "-Xmx$1024M"
+        },
+        "mcversion": {
+          "default": "latest",
+          "description": ""
+        }
+      }
+    },
+    "wurmserver": {
+      "shortname": "wurm",
+      "gamename": "Wurm Unlimited",
+      "config_options": {
+        "gamemode": {
+          "default": "Creative",
+          "description": ""
+        },
+        "homekingdom": {
+          "default": "4",
+          "description": ""
+        },
+        "adminpassword": {
+          "default": "CHANGE_ME",
+          "description": ""
+        },
+        "epicsettings": {
+          "default": "false",
+          "description": ""
+        },
+        "homeserver": {
+          "default": "true",
+          "description": ""
+        },
+        "loginserver": {
+          "default": "true",
+          "description": ""
+        },
+        "rmiport": {
+          "default": "7221",
+          "description": ""
+        },
+        "rmiregport": {
+          "default": "7220",
+          "description": ""
+        },
+        "maxplayers": {
+          "default": "200",
+          "description": ""
+        },
+        "servername": {
+          "default": "LinuxGSM",
+          "description": ""
+        },
+        "serverpassword": {
+          "default": "",
+          "description": ""
+        },
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "3724",
+          "description": ""
+        },
+        "queryport": {
+          "default": "27016",
+          "description": ""
+        }
+      }
+    },
+    "xntserver": {
+      "shortname": "xnt",
+      "gamename": "Xonotic",
+      "config_options": {}
+    },
+    "zmrserver": {
+      "shortname": "zmr",
+      "gamename": "Zombie Master: Reborn",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "27015",
+          "description": ""
+        },
+        "clientport": {
+          "default": "27005",
+          "description": ""
+        },
+        "sourcetvport": {
+          "default": "27020",
+          "description": ""
+        },
+        "defaultmap": {
+          "default": "zm_docksofthedead",
+          "description": ""
+        },
+        "maxplayers": {
+          "default": "16",
+          "description": ""
+        }
+      }
+    },
+    "zpsserver": {
+      "shortname": "zps",
+      "gamename": "Zombie Panic! Source",
+      "config_options": {
+        "ip": {
+          "default": "0.0.0.0",
+          "description": ""
+        },
+        "port": {
+          "default": "27015",
+          "description": ""
+        },
+        "clientport": {
+          "default": "27005",
+          "description": ""
+        },
+        "sourcetvport": {
+          "default": "27020",
+          "description": ""
+        },
+        "defaultmap": {
+          "default": "zps_deadend",
+          "description": ""
+        },
+        "maxplayers": {
+          "default": "20",
+          "description": ""
+        },
+        "gslt": {
+          "default": "",
+          "description": ""
+        }
+      }
+    }
+  }
+}
