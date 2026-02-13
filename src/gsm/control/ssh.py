@@ -18,13 +18,14 @@ class SSHClient:
         self._client: paramiko.SSHClient | None = None
 
     def connect(self, retries: int = 12, delay: int = 10) -> None:
-        self._client = paramiko.SSHClient()
-        self._client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         for attempt in range(retries):
             try:
+                self._client = paramiko.SSHClient()
+                self._client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
                 self._client.connect(
                     hostname=self.host, username=self.username,
                     key_filename=self.key_path, timeout=10,
+                    banner_timeout=30,
                 )
                 return
             except Exception:

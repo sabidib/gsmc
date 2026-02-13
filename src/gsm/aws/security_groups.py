@@ -14,7 +14,9 @@ def get_or_create_security_group(
         filters.append({"Name": "vpc-id", "Values": [vpc_id]})
     existing = ec2.describe_security_groups(Filters=filters)
     if existing["SecurityGroups"]:
-        return existing["SecurityGroups"][0]["GroupId"]
+        sg_id = existing["SecurityGroups"][0]["GroupId"]
+        _ensure_ssh_rule(ec2, sg_id, ssh_cidr)
+        return sg_id
 
     kwargs = {
         "GroupName": sg_name,
@@ -41,6 +43,23 @@ def get_or_create_security_group(
 
     ec2.authorize_security_group_ingress(GroupId=sg_id, IpPermissions=ip_permissions)
     return sg_id
+
+
+def _ensure_ssh_rule(ec2, sg_id: str, ssh_cidr: str) -> None:
+    """Add SSH ingress rule if the CIDR is not already present."""
+    sg = ec2.describe_security_groups(GroupIds=[sg_id])["SecurityGroups"][0]
+    for perm in sg.get("IpPermissions", []):
+        if perm.get("FromPort") == 22 and perm.get("ToPort") == 22:
+            for ip_range in perm.get("IpRanges", []):
+                if ip_range.get("CidrIp") == ssh_cidr:
+                    return
+    ec2.authorize_security_group_ingress(
+        GroupId=sg_id,
+        IpPermissions=[{
+            "IpProtocol": "tcp", "FromPort": 22, "ToPort": 22,
+            "IpRanges": [{"CidrIp": ssh_cidr, "Description": "SSH access"}],
+        }],
+    )
 
 
 def update_ssh_cidr(region: str, sg_id: str, old_cidr: str, new_cidr: str) -> None:
