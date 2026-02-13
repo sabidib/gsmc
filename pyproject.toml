@@ -1,6 +1,6 @@
 [project]
 name = "gsmc"
-version = "0.1.0"
+version = "0.2.0"
 description = "Game Server Maker - Launch game servers on AWS EC2 with Docker"
 readme = "README.md"
 requires-python = ">=3.12"
