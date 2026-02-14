@@ -115,6 +115,13 @@ class RemoteDocker:
             return None
         return output.strip().split("\n")[0]
 
+    def container_exists(self, container_name: str) -> bool:
+        """Check if a container exists (running or stopped)."""
+        exit_code, _ = self.ssh.run(
+            f"{DOCKER} inspect {shlex.quote(container_name)} > /dev/null 2>&1"
+        )
+        return exit_code == 0
+
     def is_running(self, container_name: str) -> bool:
         exit_code, output = self.ssh.run(
             f"{DOCKER} inspect --format='{{{{.State.Running}}}}' {shlex.quote(container_name)}"
@@ -128,10 +135,12 @@ class RemoteDocker:
         cmd = f"{DOCKER} logs {shlex.quote(container_name)}"
         if tail:
             cmd += f" --tail {tail}"
+        cmd += " 2>&1"
         return self.ssh.run(cmd)
 
     def logs_follow(self, container_name: str, tail: int | None = None):
         cmd = f"{DOCKER} logs -f {shlex.quote(container_name)}"
         if tail:
             cmd += f" --tail {tail}"
+        cmd += " 2>&1"
         yield from self.ssh.run_streaming(cmd)

@@ -25,6 +25,7 @@
         "ec2:CreateSnapshot",
         "ec2:CreateTags",
         "ec2:DeleteKeyPair",
+        "ec2:DeleteTags",
         "ec2:DeregisterImage",
         "ec2:ImportKeyPair",
         "ec2:RegisterImage",
@@ -84,13 +85,14 @@
       }
     },
     {
-      "Sid": "GsmSSMKeySharing",
+      "Sid": "GsmSSM",
       "Effect": "Allow",
       "Action": [
         "ssm:GetParameter",
-        "ssm:PutParameter"
+        "ssm:PutParameter",
+        "ssm:DeleteParameter"
       ],
-      "Resource": "arn:aws:ssm:*:*:parameter/gsmc/ssh-private-key"
+      "Resource": "arn:aws:ssm:*:*:parameter/gsmc/*"
     }
   ]
 }

@@ -88,7 +88,7 @@ def test_logs_follow():
     ssh.run_streaming.return_value = iter(["line1\n", "line2\n"])
     docker = RemoteDocker(ssh)
     chunks = list(docker.logs_follow("gsm-fact-123"))
-    ssh.run_streaming.assert_called_with("sudo docker logs -f gsm-fact-123")
+    ssh.run_streaming.assert_called_with("sudo docker logs -f gsm-fact-123 2>&1")
     assert chunks == ["line1\n", "line2\n"]
 
 
@@ -97,7 +97,7 @@ def test_logs_follow_with_tail():
     ssh.run_streaming.return_value = iter(["line1\n"])
     docker = RemoteDocker(ssh)
     list(docker.logs_follow("gsm-fact-123", tail=50))
-    ssh.run_streaming.assert_called_with("sudo docker logs -f gsm-fact-123 --tail 50")
+    ssh.run_streaming.assert_called_with("sudo docker logs -f gsm-fact-123 --tail 50 2>&1")
 
 
 def test_find_gsm_container():

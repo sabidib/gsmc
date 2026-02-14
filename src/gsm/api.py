@@ -26,24 +26,15 @@ def create_app() -> FastAPI:
 
     @app.get("/servers")
     def list_servers():
-        try:
-            provisioner.reconcile(extra_regions={"us-east-1"})
-        except Exception:
-            pass
+        provisioner.auto_reconcile()
         return [asdict(s) for s in provisioner.state.list_all()]
 
     @app.get("/servers/{server_id}")
     def get_server(server_id: str):
+        provisioner.auto_reconcile()
         record = provisioner.state.get_by_name_or_id(server_id)
         if not record:
             raise HTTPException(status_code=404, detail="Server not found")
-        try:
-            provisioner.reconcile(extra_regions={record.region})
-        except Exception:
-            pass
-        record = provisioner.state.get_by_name_or_id(server_id)
-        if not record:
-            raise HTTPException(status_code=404, detail="Server was terminated externally")
         return asdict(record)
 
     @app.post("/servers")
@@ -70,6 +61,7 @@ def create_app() -> FastAPI:
 
     @app.delete("/servers/{server_id}")
     def destroy_server(server_id: str):
+        provisioner.auto_reconcile()
         record = provisioner.state.get_by_name_or_id(server_id)
         if not record:
             raise HTTPException(status_code=404, detail="Server not found")
@@ -78,6 +70,7 @@ def create_app() -> FastAPI:
 
     @app.post("/servers/{server_id}/pause")
     def pause_server(server_id: str):
+        provisioner.auto_reconcile()
         record = provisioner.state.get_by_name_or_id(server_id)
         if not record:
             raise HTTPException(status_code=404, detail="Server not found")
@@ -86,6 +79,7 @@ def create_app() -> FastAPI:
 
     @app.post("/servers/{server_id}/stop")
     def stop_server(server_id: str):
+        provisioner.auto_reconcile()
         record = provisioner.state.get_by_name_or_id(server_id)
         if not record:
             raise HTTPException(status_code=404, detail="Server not found")
@@ -94,6 +88,7 @@ def create_app() -> FastAPI:
 
     @app.post("/servers/{server_id}/resume")
     def resume_server(server_id: str):
+        provisioner.auto_reconcile()
         record = provisioner.state.get_by_name_or_id(server_id)
         if not record:
             raise HTTPException(status_code=404, detail="Server not found")
@@ -102,6 +97,7 @@ def create_app() -> FastAPI:
 
     @app.post("/servers/{server_id}/pin")
     def pin_server(server_id: str):
+        provisioner.auto_reconcile()
         record = provisioner.state.get_by_name_or_id(server_id)
         if not record:
             raise HTTPException(status_code=404, detail="Server not found")
@@ -110,6 +106,7 @@ def create_app() -> FastAPI:
 
     @app.post("/servers/{server_id}/unpin")
     def unpin_server(server_id: str):
+        provisioner.auto_reconcile()
         record = provisioner.state.get_by_name_or_id(server_id)
         if not record:
             raise HTTPException(status_code=404, detail="Server not found")
@@ -118,6 +115,7 @@ def create_app() -> FastAPI:
 
     @app.post("/servers/{server_id}/snapshot")
     def snapshot_server(server_id: str):
+        provisioner.auto_reconcile()
         record = provisioner.state.get_by_name_or_id(server_id)
         if not record:
             raise HTTPException(status_code=404, detail="Server not found")

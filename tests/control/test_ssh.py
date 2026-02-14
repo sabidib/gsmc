@@ -150,8 +150,6 @@ def test_ensure_key_pair_fetches_from_ssm(tmp_path):
         key_path = ensure_key_pair("us-east-1", key_dir=key_dir)
         assert key_path.exists()
         assert key_path.read_text() == ssm_key_pem
-        # Should NOT have stored to SSM
-        mock_ssm.put_parameter.assert_not_called()
 
 
 def test_ensure_key_pair_ssm_unavailable_falls_back(tmp_path):
@@ -171,8 +169,8 @@ def test_ensure_key_pair_ssm_unavailable_falls_back(tmp_path):
         assert key_path.name == "gsm-key.pem"
 
 
-def test_ensure_key_pair_local_key_exists_skips_ssm(tmp_path):
-    """Local key exists → skips SSM entirely, just ensures EC2 key pair."""
+def test_ensure_key_pair_local_key_exists_uploads_to_ssm(tmp_path):
+    """Local key exists, SSM empty → uploads local key to SSM."""
     key_dir = tmp_path / "keys"
     key_dir.mkdir(parents=True)
     key_path = key_dir / "gsm-key.pem"
@@ -183,17 +181,55 @@ def test_ensure_key_pair_local_key_exists_skips_ssm(tmp_path):
 
     with patch("gsm.control.ssh.boto3") as mock_boto3:
         mock_ec2, mock_ssm = _mock_boto3_clients(mock_boto3)
+        # SSM has no key
+        mock_ssm.get_parameter.side_effect = Exception("ParameterNotFound")
+        mock_ssm.put_parameter.return_value = {}
         # EC2 has no key pair
         mock_ec2.describe_key_pairs.side_effect = Exception("not found")
         mock_ec2.import_key_pair.return_value = {}
 
         result = ensure_key_pair("us-east-1", key_dir=key_dir)
         assert result == key_path
-        # SSM should not be called at all
-        mock_ssm.get_parameter.assert_not_called()
-        mock_ssm.put_parameter.assert_not_called()
+        # SSM should be checked and local key uploaded
+        mock_ssm.get_parameter.assert_called_once()
+        mock_ssm.put_parameter.assert_called_once()
         # EC2 key pair should be imported
         mock_ec2.import_key_pair.assert_called_once()
+
+
+def test_ensure_key_pair_ssm_overrides_local_key(tmp_path):
+    """Local key exists, SSM has different key → SSM wins."""
+    key_dir = tmp_path / "keys"
+    key_dir.mkdir(parents=True)
+    key_path = key_dir / "gsm-key.pem"
+
+    import paramiko as _paramiko
+    import io
+
+    # Local key
+    local_key = _paramiko.RSAKey.generate(2048)
+    local_key.write_private_key_file(str(key_path))
+    old_content = key_path.read_text()
+
+    # Different key in SSM
+    ssm_key = _paramiko.RSAKey.generate(2048)
+    buf = io.StringIO()
+    ssm_key.write_private_key(buf)
+    ssm_pem = buf.getvalue()
+
+    with patch("gsm.control.ssh.boto3") as mock_boto3:
+        mock_ec2, mock_ssm = _mock_boto3_clients(mock_boto3)
+        mock_ssm.get_parameter.return_value = {
+            "Parameter": {"Value": ssm_pem}
+        }
+        # EC2 has no key pair
+        mock_ec2.describe_key_pairs.side_effect = Exception("not found")
+        mock_ec2.import_key_pair.return_value = {}
+
+        ensure_key_pair("us-east-1", key_dir=key_dir)
+        # Local key should be overwritten with SSM key
+        assert key_path.read_text() == ssm_pem
+        assert key_path.read_text() != old_content
 
 
 def test_ensure_key_pair_skips_reimport_when_fingerprint_matches(tmp_path):

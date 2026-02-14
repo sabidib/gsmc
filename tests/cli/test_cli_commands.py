@@ -12,21 +12,7 @@ def test_list_command(mock_prov_cls, make_server_record):
     result = runner.invoke(cli, ["list"])
     assert result.exit_code == 0
     assert "factorio" in result.output
-    mock_prov.reconcile.assert_called_once()
-
-
-@patch("gsm.cli.Provisioner")
-def test_list_command_reconcile_failure(mock_prov_cls, make_server_record):
-    """Reconcile failure shows warning but still lists cached servers."""
-    mock_prov = MagicMock()
-    mock_prov_cls.return_value = mock_prov
-    mock_prov.reconcile.side_effect = Exception("aws error")
-    mock_prov.state.list_all.return_value = [make_server_record()]
-    runner = CliRunner()
-    result = runner.invoke(cli, ["list"])
-    assert result.exit_code == 0
-    assert "Warning" in result.output
-    assert "factorio" in result.output
+    mock_prov.auto_reconcile.assert_called_once()
 
 
 @patch("gsm.cli.Provisioner")
@@ -38,7 +24,7 @@ def test_info_command(mock_prov_cls, make_server_record):
     result = runner.invoke(cli, ["info", "srv-1"])
     assert result.exit_code == 0
     assert "54.1.2.3" in result.output
-    mock_prov.reconcile.assert_called_once()
+    mock_prov.auto_reconcile.assert_called_once()
 
 
 @patch("gsm.cli.RemoteDocker")
@@ -47,6 +33,7 @@ def test_logs_follow_flag(mock_prov_cls, mock_docker_cls, make_server_record):
     mock_prov = MagicMock()
     mock_prov_cls.return_value = mock_prov
     mock_prov.state.get_by_name_or_id.return_value = make_server_record()
+    mock_prov._resolve_container.return_value = "gsm-factorio-srv-1"
     mock_docker = MagicMock()
     mock_docker_cls.return_value = mock_docker
     mock_docker.logs_follow.return_value = iter(["hello\n"])

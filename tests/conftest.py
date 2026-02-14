@@ -120,6 +120,8 @@ def mock_launch_deps(monkeypatch):
         "find_gsm_instances": [],
         "aws_list_snapshots": [],
         "find_gsm_eips": [],
+        "set_instance_tag": None,
+        "delete_instance_tag": None,
     }
     mocks = {}
     for name, rv in defaults.items():

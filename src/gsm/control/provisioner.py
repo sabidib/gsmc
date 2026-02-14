@@ -13,6 +13,8 @@ from gsm.aws.ec2 import (
     stop_instance,
     start_instance,
     wait_for_instance_stopped,
+    set_instance_tag,
+    delete_instance_tag,
 )
 from gsm.aws.security_groups import get_or_create_security_group
 from gsm.control.docker import RemoteDocker
@@ -80,6 +82,23 @@ def _is_client_error(exc: ClientError, code: str) -> bool:
     return exc.response["Error"]["Code"] == code
 
 
+def _parse_ports_tag(tag: str) -> dict[str, int]:
+    """Parse compact ports tag like '27015/udp,34197/udp' into {port_spec: port_num}."""
+    if not tag:
+        return {}
+    result = {}
+    for entry in tag.split(","):
+        entry = entry.strip()
+        if "/" not in entry:
+            continue
+        port_str = entry.split("/")[0]
+        try:
+            result[entry] = int(port_str)
+        except ValueError:
+            continue
+    return result
+
+
 def get_default_vpc_and_subnet(region: str) -> tuple[str, str]:
     """Find the default VPC and a subnet in it."""
     ec2 = boto3.client("ec2", region_name=region)
@@ -105,6 +124,8 @@ class Provisioner:
         "stopped": "paused",
     }
 
+    SSM_ACTIVE_REGIONS_PARAM = "/gsmc/active-regions"
+
     def __init__(self, state_dir=None, on_status=None, debug=False, on_debug=None):
         kwargs = {}
         if state_dir is not None:
@@ -122,6 +143,72 @@ class Provisioner:
     def _debug_callback(self, message: str) -> None:
         if self.debug and self.on_debug:
             self.on_debug(message)
+
+    def _get_active_regions(self) -> set[str]:
+        """Read active regions from SSM Parameter Store."""
+        from gsm.control.ssh import SSM_REGION
+        ssm = boto3.client("ssm", region_name=SSM_REGION)
+        try:
+            response = ssm.get_parameter(Name=self.SSM_ACTIVE_REGIONS_PARAM)
+            value = response["Parameter"]["Value"]
+            return {r.strip() for r in value.split(",") if r.strip()}
+        except ClientError as e:
+            if _is_client_error(e, "ParameterNotFound"):
+                return set()
+            raise
+
+    def _add_active_region(self, region: str) -> None:
+        """Add a region to the SSM active-regions set (idempotent)."""
+        current = self._get_active_regions()
+        if region in current:
+            return
+        current.add(region)
+        from gsm.control.ssh import SSM_REGION
+        ssm = boto3.client("ssm", region_name=SSM_REGION)
+        ssm.put_parameter(
+            Name=self.SSM_ACTIVE_REGIONS_PARAM,
+            Value=",".join(sorted(current)),
+            Type="String",
+            Overwrite=True,
+        )
+
+    def _remove_active_region(self, region: str) -> None:
+        """Remove a region if no local servers remain in it."""
+        remaining = [r for r in self.state.list_all() if r.region == region]
+        if remaining:
+            return
+        current = self._get_active_regions()
+        if region not in current:
+            return
+        current.discard(region)
+        from gsm.control.ssh import SSM_REGION
+        ssm = boto3.client("ssm", region_name=SSM_REGION)
+        if current:
+            ssm.put_parameter(
+                Name=self.SSM_ACTIVE_REGIONS_PARAM,
+                Value=",".join(sorted(current)),
+                Type="String",
+                Overwrite=True,
+            )
+        else:
+            try:
+                ssm.delete_parameter(Name=self.SSM_ACTIVE_REGIONS_PARAM)
+            except ClientError as e:
+                if not _is_client_error(e, "ParameterNotFound"):
+                    raise
+
+    def auto_reconcile(self) -> None:
+        """Run reconcile if the TTL file is stale or missing. Best-effort."""
+        try:
+            import time
+            ttl_file = self.state.state_dir / ".last_reconcile"
+            if ttl_file.exists():
+                last = float(ttl_file.read_text().strip())
+                if time.time() - last < 30:
+                    return
+            self.reconcile()
+        except Exception:
+            pass
 
     def _write_metadata_file(self, ssh, record: ServerRecord) -> None:
         """Write server metadata to /opt/gsm/metadata.json on the EC2 host."""
@@ -158,14 +245,45 @@ class Provisioner:
             if state in ("terminated", "shutting-down"):
                 self.state.delete(server_id)
                 return None
+            tags = {t["Key"]: t["Value"] for t in instance.get("Tags", [])}
             new_status = self.EC2_STATE_MAP.get(state, record.status)
-            if record.status == "stopped" and new_status == "running":
-                new_status = "stopped"
+            # Respect container-stopped tag and local state
+            if new_status == "running":
+                if record.status == "stopped" or tags.get("gsm:container-stopped") == "true":
+                    new_status = "stopped"
             new_ip = instance.get("PublicIpAddress") or ""
             if new_status != record.status:
                 self.state.update_status(server_id, new_status)
             if new_ip != record.public_ip:
                 self.state.update_field(server_id, "public_ip", new_ip)
+            # Sync tag-backed fields (cross-machine changes)
+            tag_eip = tags.get("gsm:eip-alloc-id", "")
+            if tag_eip != record.eip_allocation_id:
+                self.state.update_field(server_id, "eip_allocation_id", tag_eip)
+                if tag_eip:
+                    try:
+                        for addr in find_gsm_eips(record.region):
+                            if addr["AllocationId"] == tag_eip:
+                                self.state.update_field(server_id, "eip_public_ip", addr.get("PublicIp", ""))
+                                break
+                    except Exception:
+                        pass
+                else:
+                    self.state.update_field(server_id, "eip_public_ip", "")
+            tag_cn = tags.get("gsm:container-name", "")
+            if tag_cn and tag_cn != record.container_name:
+                self.state.update_field(server_id, "container_name", tag_cn)
+            tag_sg = tags.get("gsm:sg-id", "")
+            if tag_sg and tag_sg != record.security_group_id:
+                self.state.update_field(server_id, "security_group_id", tag_sg)
+            tag_rcon = tags.get("gsm:rcon-password", "")
+            if tag_rcon and tag_rcon != record.rcon_password:
+                self.state.update_field(server_id, "rcon_password", tag_rcon)
+            tag_ports = tags.get("gsm:ports", "")
+            if tag_ports:
+                parsed = _parse_ports_tag(tag_ports)
+                if parsed != record.ports:
+                    self.state.update_field(server_id, "ports", parsed)
             return self.state.get(server_id)
         except ClientError as e:
             if _is_client_error(e, "InvalidInstanceID.NotFound"):
@@ -198,6 +316,17 @@ class Provisioner:
 
         if self.state.name_exists(name):
             raise ValueError(f"A server named '{name}' already exists")
+
+        # Safety net: check EC2 tags across active regions for duplicate names
+        try:
+            for check_region in self._get_active_regions() | {region}:
+                for inst in find_gsm_instances(check_region):
+                    if inst.get("gsm_name") == name:
+                        raise ValueError(f"A server named '{name}' already exists (found in {check_region})")
+        except ValueError:
+            raise
+        except Exception:
+            pass  # Best-effort; don't block launch on network errors
 
         # Snapshot restores reuse the existing container as-is
         if from_snapshot and (env_overrides or uploads or lgsm_config_overrides or lgsm_config_file):
@@ -289,6 +418,15 @@ class Provisioner:
             vpc_id=vpc_id,
         )
 
+        # Compute container_name and ports early so they're available for initial save
+        container_name = f"gsm-{game.name}-{server_id[:8]}"
+        ports = {f"{p.port}/{p.protocol}": p.port for p in game.ports}
+        ports_tag = ",".join(sorted(ports.keys()))
+
+        # Generate launch_time before EC2 call so it can be tagged
+        from datetime import datetime, timezone
+        launch_time = datetime.now(timezone.utc).isoformat()
+
         # Launch instance
         self._notify("Launching instance")
         instance_id = launch_instance(
@@ -296,11 +434,17 @@ class Provisioner:
             key_name=KEY_NAME, security_group_id=sg_id, subnet_id=subnet_id,
             game_name=game.name, server_id=server_id, server_name=name,
             disk_gb=game.disk_gb,
+            ports_tag=ports_tag,
+            rcon_password=rcon_password or "",
+            container_name="" if from_snapshot else container_name,
+            launch_time=launch_time,
         )
 
-        # Compute container_name and ports early so they're available for initial save
-        container_name = f"gsm-{game.name}-{server_id[:8]}"
-        ports = {f"{p.port}/{p.protocol}": p.port for p in game.ports}
+        # Track region immediately so other machines can discover this instance
+        try:
+            self._add_active_region(region)
+        except Exception:
+            pass
 
         # Save initial record so the instance is always tracked
         initial_record = ServerRecord(
@@ -311,6 +455,7 @@ class Provisioner:
             container_name=container_name,
             rcon_password="",
             config={},
+            launch_time=launch_time,
         )
         self.state.save(initial_record)
 
@@ -360,6 +505,11 @@ class Provisioner:
                         "The snapshot may not have been created by gsm."
                     )
                 container_name = old_name
+                # Update container-name tag since snapshot may have different name
+                try:
+                    set_instance_tag(region, instance_id, "gsm:container-name", container_name)
+                except Exception:
+                    pass
                 self._notify("Starting restored container")
                 docker.start(container_name)
             else:
@@ -436,6 +586,9 @@ class Provisioner:
         except BaseException as original_error:
             # Clean up the instance so we don't leave orphans
             self._notify("Cleaning up after failure")
+            if ssh:
+                ssh.close()
+                ssh = None
             if restore_ami_id:
                 try:
                     deregister_ami(region, restore_ami_id)
@@ -449,9 +602,6 @@ class Provisioner:
             # Terminate succeeded — remove the state entry
             self.state.delete(server_id)
             raise
-        finally:
-            if ssh:
-                ssh.close()
 
         # Save final state with full metadata
         record = ServerRecord(
@@ -466,11 +616,20 @@ class Provisioner:
         )
         self.state.save(record)
 
-        # Write metadata file to disk for snapshot recovery
+        # Update rcon_password tag if determined late (LinuxGSM games)
+        if game.lgsm_server_code and rcon_password:
+            try:
+                set_instance_tag(region, instance_id, "gsm:rcon-password", rcon_password)
+            except Exception:
+                pass
+
+        # Write metadata file to disk for snapshot recovery (needs open SSH)
         try:
             self._write_metadata_file(ssh, record)
         except Exception:
             pass
+        if ssh:
+            ssh.close()
 
         # Pin a static Elastic IP if requested
         if pin_ip:
@@ -485,6 +644,10 @@ class Provisioner:
                 record.eip_public_ip = eip_ip
                 record.public_ip = eip_ip
                 self.state.save(record)
+                try:
+                    set_instance_tag(region, instance_id, "gsm:eip-alloc-id", alloc_id)
+                except Exception:
+                    pass
             except Exception:
                 raise
 
@@ -505,13 +668,16 @@ class Provisioner:
         if not refreshed:
             # Instance already gone, state already cleaned up by _refresh_record
             return
-        # Release EIP before terminating (best effort)
+        # Release EIP before terminating
         if refreshed.eip_allocation_id:
             try:
                 disassociate_eip(refreshed.region, refreshed.eip_allocation_id)
+            except Exception:
+                pass  # AWS auto-disassociates on termination
+            try:
                 release_eip(refreshed.region, refreshed.eip_allocation_id)
             except Exception:
-                pass
+                pass  # EIP may leak; use 'gsmc eips --cleanup' to find it
 
         self._notify("Terminating instance")
         try:
@@ -519,10 +685,20 @@ class Provisioner:
         except ClientError as e:
             if not _is_client_error(e, "InvalidInstanceID.NotFound"):
                 raise
+        destroyed_region = refreshed.region
         self.state.delete(server_id)
 
+        try:
+            self._remove_active_region(destroyed_region)
+        except Exception:
+            pass
+
     def destroy_all(self) -> None:
-        """Terminate all servers."""
+        """Terminate all servers (including cross-machine)."""
+        try:
+            self.reconcile()
+        except Exception:
+            pass
         errors = []
         for record in self.state.list_all():
             try:
@@ -542,6 +718,31 @@ class Provisioner:
         ssh.connect()
         return ssh
 
+    def _resolve_container(self, server_id: str, docker: RemoteDocker) -> str:
+        """Verify the container name exists on the host, or discover the actual one.
+
+        If the expected container is missing, finds the real GSM container and
+        updates both local state and the EC2 tag for cross-machine sync.
+        """
+        record = self.state.get(server_id)
+        if not record:
+            raise ValueError(f"Server {server_id} not found")
+        if docker.container_exists(record.container_name):
+            return record.container_name
+        # Container not found — try to discover the actual one
+        actual = docker.find_gsm_container()
+        if actual:
+            self.state.update_field(server_id, "container_name", actual)
+            try:
+                set_instance_tag(record.region, record.instance_id, "gsm:container-name", actual)
+            except Exception:
+                pass
+            return actual
+        raise RuntimeError(
+            f"Container {record.container_name} not found on the server "
+            f"and no GSM container discovered"
+        )
+
     def pause(self, server_id: str) -> None:
         """Stop Docker container then stop EC2 instance."""
         record = self._refresh_record(server_id)
@@ -559,8 +760,8 @@ class Provisioner:
             ssh.connect()
             docker = RemoteDocker(ssh)
             docker.stop(record.container_name)
-        except BaseException:
-            pass  # Proceed even if SSH/Docker fails or interrupted
+        except (Exception, KeyboardInterrupt):
+            pass  # Proceed to stop instance even if SSH/Docker fails or is interrupted
         finally:
             if ssh:
                 ssh.close()
@@ -629,9 +830,14 @@ class Provisioner:
             key_path = ensure_key_pair(record.region)
             ssh = SSHClient(host=new_ip, key_path=str(key_path), on_debug=self._debug_callback if self.debug else None)
             ssh.connect()
-            self._notify("Starting container")
             docker = RemoteDocker(ssh)
-            docker.start(record.container_name)
+            container_name = self._resolve_container(server_id, docker)
+            self._notify("Starting container")
+            docker.start(container_name)
+            try:
+                delete_instance_tag(record.region, record.instance_id, "gsm:container-stopped")
+            except Exception:
+                pass
         except BaseException as e:
             raise RuntimeError(
                 f"Instance is running (IP: {new_ip}) but container failed to start: {e}. "
@@ -650,10 +856,15 @@ class Provisioner:
         ssh = SSHClient(host=record.public_ip, key_path=str(key_path), on_debug=self._debug_callback if self.debug else None)
         ssh.connect()
         try:
-            self._notify("Starting container")
             docker = RemoteDocker(ssh)
-            docker.start(record.container_name)
+            container_name = self._resolve_container(server_id, docker)
+            self._notify("Starting container")
+            docker.start(container_name)
             self.state.update_status(server_id, "running")
+            try:
+                delete_instance_tag(record.region, record.instance_id, "gsm:container-stopped")
+            except Exception:
+                pass
             return self.state.get(server_id)
         finally:
             ssh.close()
@@ -670,10 +881,15 @@ class Provisioner:
         ssh = SSHClient(host=record.public_ip, key_path=str(key_path), on_debug=self._debug_callback if self.debug else None)
         ssh.connect()
         try:
-            self._notify("Stopping container")
             docker = RemoteDocker(ssh)
-            docker.stop(record.container_name)
+            container_name = self._resolve_container(server_id, docker)
+            self._notify("Stopping container")
+            docker.stop(container_name)
             self.state.update_status(server_id, "stopped")
+            try:
+                set_instance_tag(record.region, record.instance_id, "gsm:container-stopped", "true")
+            except Exception:
+                pass
         finally:
             ssh.close()
 
@@ -700,6 +916,10 @@ class Provisioner:
 
         self.state.update_field(server_id, "eip_allocation_id", alloc_id)
         self.state.update_field(server_id, "eip_public_ip", eip_ip)
+        try:
+            set_instance_tag(record.region, record.instance_id, "gsm:eip-alloc-id", alloc_id)
+        except Exception:
+            pass
         return self.state.get(server_id)
 
     def unpin_ip(self, server_id: str) -> ServerRecord:
@@ -716,6 +936,10 @@ class Provisioner:
 
         self.state.update_field(server_id, "eip_allocation_id", "")
         self.state.update_field(server_id, "eip_public_ip", "")
+        try:
+            delete_instance_tag(record.region, record.instance_id, "gsm:eip-alloc-id")
+        except Exception:
+            pass
 
         # Get the new ephemeral IP if server is running
         if record.status in ("running", "stopped"):
@@ -730,6 +954,10 @@ class Provisioner:
         local_records = self.state.list_all()
         for r in local_records:
             regions.add(r.region)
+        try:
+            regions.update(self._get_active_regions())
+        except Exception:
+            pass
         if not regions:
             regions.add("us-east-1")
 
@@ -809,13 +1037,17 @@ class Provisioner:
 
     def reconcile(self, extra_regions: set[str] | None = None) -> None:
         """Sync local state with EC2 reality."""
-        # Collect regions from local records + extra_regions
+        # Collect regions from local records + extra_regions + SSM active-regions
         regions = set()
         local_records = self.state.list_all()
         for r in local_records:
             regions.add(r.region)
         if extra_regions:
             regions.update(extra_regions)
+        try:
+            regions.update(self._get_active_regions())
+        except Exception:
+            pass
         if not regions:
             regions.add("us-east-1")
 
@@ -826,27 +1058,69 @@ class Provisioner:
                 inst["region"] = region
                 ec2_by_gsm_id[inst["gsm_id"]] = inst
 
+        # Build EIP lookup for resolving eip_alloc_id -> public IP
+        eip_by_alloc: dict[str, str] = {}
+        for region in regions:
+            for addr in find_gsm_eips(region):
+                eip_by_alloc[addr["AllocationId"]] = addr.get("PublicIp", "")
+
         # Update or remove local records
         local_ids = {r.id for r in local_records}
         for record in local_records:
             if record.id in ec2_by_gsm_id:
                 inst = ec2_by_gsm_id[record.id]
                 new_status = self.EC2_STATE_MAP.get(inst["state"], record.status)
-                if record.status == "stopped" and new_status == "running":
-                    new_status = "stopped"
+                # Preserve "stopped" if local state already knows, OR if EC2 tag says so
+                if new_status == "running":
+                    if record.status == "stopped" or inst.get("gsm_container_stopped") == "true":
+                        new_status = "stopped"
                 if new_status != record.status:
                     self.state.update_status(record.id, new_status)
                 new_ip = inst.get("public_ip") or ""
                 if new_ip != record.public_ip:
                     self.state.update_field(record.id, "public_ip", new_ip)
+                # Sync tag-backed fields from EC2 (covers cross-machine changes)
+                tag_sg = inst.get("gsm_sg_id", "")
+                if tag_sg and tag_sg != record.security_group_id:
+                    self.state.update_field(record.id, "security_group_id", tag_sg)
+                tag_ports = _parse_ports_tag(inst.get("gsm_ports", ""))
+                if tag_ports and tag_ports != record.ports:
+                    self.state.update_field(record.id, "ports", tag_ports)
+                tag_rcon = inst.get("gsm_rcon_password", "")
+                if tag_rcon and tag_rcon != record.rcon_password:
+                    self.state.update_field(record.id, "rcon_password", tag_rcon)
+                tag_eip = inst.get("gsm_eip_alloc_id", "")
+                if tag_eip != record.eip_allocation_id:
+                    self.state.update_field(record.id, "eip_allocation_id", tag_eip)
+                    eip_ip = eip_by_alloc.get(tag_eip, "") if tag_eip else ""
+                    self.state.update_field(record.id, "eip_public_ip", eip_ip)
+                tag_cn = inst.get("gsm_container_name", "")
+                if tag_cn and tag_cn != record.container_name:
+                    self.state.update_field(record.id, "container_name", tag_cn)
+                tag_lt = inst.get("gsm_launch_time", "")
+                if tag_lt and tag_lt != record.launch_time:
+                    self.state.update_field(record.id, "launch_time", tag_lt)
             else:
                 # Instance no longer exists in EC2
                 self.state.delete(record.id)
 
-        # Adopt orphaned EC2 instances not in local state
         for gsm_id, inst in ec2_by_gsm_id.items():
             if gsm_id not in local_ids:
                 status = self.EC2_STATE_MAP.get(inst["state"], "running")
+                # Respect container-stopped tag for orphans too
+                if status == "running" and inst.get("gsm_container_stopped") == "true":
+                    status = "stopped"
+                eip_alloc = inst.get("gsm_eip_alloc_id", "")
+                eip_ip = eip_by_alloc.get(eip_alloc, "") if eip_alloc else ""
+                # Use tagged container_name if available, otherwise ServerRecord
+                # __post_init__ will generate the default
+                cn_kwargs = {}
+                tag_cn = inst.get("gsm_container_name", "")
+                if tag_cn:
+                    cn_kwargs["container_name"] = tag_cn
+                tag_lt = inst.get("gsm_launch_time", "")
+                if tag_lt:
+                    cn_kwargs["launch_time"] = tag_lt
                 orphan = ServerRecord(
                     id=gsm_id,
                     game=inst.get("gsm_game", ""),
@@ -854,11 +1128,13 @@ class Provisioner:
                     instance_id=inst["instance_id"],
                     region=inst["region"],
                     public_ip=inst.get("public_ip") or "",
-                    ports={},
+                    ports=_parse_ports_tag(inst.get("gsm_ports", "")),
                     status=status,
-                    security_group_id="",
-                    rcon_password="",
-                    config={},
+                    security_group_id=inst.get("gsm_sg_id", ""),
+                    rcon_password=inst.get("gsm_rcon_password", ""),
+                    eip_allocation_id=eip_alloc,
+                    eip_public_ip=eip_ip,
+                    **cn_kwargs,
                 )
                 self.state.save(orphan)
 
@@ -896,10 +1172,8 @@ class Provisioner:
                 self.snapshot_state.save(orphan)
 
         # EIP reconciliation: clear stale EIP references
-        aws_eip_alloc_ids: set[str] = set()
-        for region in regions:
-            for addr in find_gsm_eips(region):
-                aws_eip_alloc_ids.add(addr["AllocationId"])
+        # Reuse eip_by_alloc built earlier to avoid redundant API calls
+        aws_eip_alloc_ids = set(eip_by_alloc.keys())
 
         for record in self.state.list_all():
             if record.eip_allocation_id and record.eip_allocation_id not in aws_eip_alloc_ids:
@@ -909,3 +1183,11 @@ class Provisioner:
                 if record.id in ec2_by_gsm_id:
                     new_ip = ec2_by_gsm_id[record.id].get("public_ip") or ""
                     self.state.update_field(record.id, "public_ip", new_ip)
+
+        # Write TTL file so auto_reconcile can skip redundant runs
+        try:
+            import time
+            ttl_file = self.state.state_dir / ".last_reconcile"
+            ttl_file.write_text(str(time.time()))
+        except Exception:
+            pass

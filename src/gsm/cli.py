@@ -146,7 +146,7 @@ def _load_games():
 
 
 @click.group(cls=HelpfulGroup)
-@click.version_option(version="0.1.0", prog_name="gsmc")
+@click.version_option(version="0.3.0", prog_name="gsmc")
 @click.option("--debug", is_flag=True, help="Show SSH commands and output")
 @click.pass_context
 def cli(ctx, debug):
@@ -294,10 +294,7 @@ def launch(ctx, game_name, instance_type, region, name, upload, from_snapshot, c
 def list_servers():
     """List all running servers."""
     provisioner = Provisioner()
-    try:
-        provisioner.reconcile(extra_regions={"us-east-1"})
-    except Exception:
-        console.print("[yellow]Warning: Could not sync with AWS. Showing cached state.[/]")
+    provisioner.auto_reconcile()
     records = provisioner.state.list_all()
     if not records:
         console.print("No servers running.")
@@ -334,19 +331,10 @@ def list_servers():
 def info(server):
     """Show details for a server."""
     provisioner = Provisioner()
+    provisioner.auto_reconcile()
     record = provisioner.state.get_by_name_or_id(server)
     if not record:
         console.print(f"[red]Server not found: {server}[/]")
-        raise SystemExit(1)
-
-    try:
-        provisioner.reconcile(extra_regions={record.region})
-    except Exception:
-        pass
-    # Re-read after reconcile (may have updated or deleted)
-    record = provisioner.state.get_by_name_or_id(server)
-    if not record:
-        console.print(f"[red]Server {server} was terminated externally.[/]")
         raise SystemExit(1)
 
     console.print(f"[bold]Server: {record.name}[/]")
@@ -404,6 +392,7 @@ def destroy(ctx, server, destroy_all, yes):
         console.print("[green]All servers destroyed.[/]")
         return
 
+    provisioner.auto_reconcile()
     record = provisioner.state.get_by_name_or_id(server)
     if not record:
         console.print(f"[red]Server not found: {server}[/]")
@@ -436,6 +425,7 @@ def destroy(ctx, server, destroy_all, yes):
 def logs(ctx, server, tail, follow):
     """Show server container logs."""
     provisioner = _make_provisioner(ctx)
+    provisioner.auto_reconcile()
     record = provisioner.state.get_by_name_or_id(server)
     if not record:
         console.print(f"[red]Server not found: {server}[/]")
@@ -447,8 +437,9 @@ def logs(ctx, server, tail, follow):
     try:
         ssh = provisioner.get_ssh_client(record.id)
         docker = RemoteDocker(ssh)
+        container_name = provisioner._resolve_container(record.id, docker)
         if not follow:
-            exit_code, output = docker.logs(record.container_name, tail=tail)
+            exit_code, output = docker.logs(container_name, tail=tail)
         progress.finish()
     except KeyboardInterrupt:
         progress.fail("Interrupted")
@@ -461,7 +452,7 @@ def logs(ctx, server, tail, follow):
 
     if follow:
         try:
-            for chunk in docker.logs_follow(record.container_name, tail=tail):
+            for chunk in docker.logs_follow(container_name, tail=tail):
                 sys.stdout.write(chunk)
                 sys.stdout.flush()
         except KeyboardInterrupt:
@@ -486,6 +477,7 @@ def logs(ctx, server, tail, follow):
 def stop(ctx, server):
     """Stop a server container (keeps instance running)."""
     provisioner = _make_provisioner(ctx)
+    provisioner.auto_reconcile()
     record = provisioner.state.get_by_name_or_id(server)
     if not record:
         console.print(f"[red]Server not found: {server}[/]")
@@ -510,15 +502,16 @@ def stop(ctx, server):
 @click.argument("server", shell_complete=_complete_server)
 def ssh(server):
     """SSH into a server instance."""
-    from gsm.control.ssh import KEY_NAME, DEFAULT_KEY_DIR
+    from gsm.control.ssh import ensure_key_pair
 
     provisioner = Provisioner()
+    provisioner.auto_reconcile()
     record = provisioner.state.get_by_name_or_id(server)
     if not record:
         console.print(f"[red]Server not found: {server}[/]")
         raise SystemExit(1)
 
-    key_path = DEFAULT_KEY_DIR / f"{KEY_NAME}.pem"
+    key_path = ensure_key_pair(record.region)
     os.execvp("ssh", [
         "ssh", "-i", str(key_path),
         "-o", "StrictHostKeyChecking=no",
@@ -533,6 +526,7 @@ def ssh(server):
 def exec_cmd(ctx, server, command):
     """Execute a command in the server container."""
     provisioner = _make_provisioner(ctx)
+    provisioner.auto_reconcile()
     record = provisioner.state.get_by_name_or_id(server)
     if not record:
         console.print(f"[red]Server not found: {server}[/]")
@@ -544,8 +538,9 @@ def exec_cmd(ctx, server, command):
     try:
         ssh_client = provisioner.get_ssh_client(record.id)
         docker = RemoteDocker(ssh_client)
+        container_name = provisioner._resolve_container(record.id, docker)
         cmd_str = " ".join(command)
-        exit_code, output = docker.exec(record.container_name, cmd_str)
+        exit_code, output = docker.exec(container_name, cmd_str)
         progress.finish()
     except KeyboardInterrupt:
         progress.fail("Interrupted")
@@ -572,6 +567,7 @@ def rcon(server, command):
     from rcon.source import Client as RconClient
 
     provisioner = Provisioner()
+    provisioner.auto_reconcile()
     record = provisioner.state.get_by_name_or_id(server)
     if not record:
         console.print(f"[red]Server not found: {server}[/]")
@@ -605,6 +601,7 @@ def upload(ctx, server, local_path, container_path):
     import uuid as _uuid
 
     provisioner = _make_provisioner(ctx)
+    provisioner.auto_reconcile()
     record = provisioner.state.get_by_name_or_id(server)
     if not record:
         console.print(f"[red]Server not found: {server}[/]")
@@ -616,10 +613,11 @@ def upload(ctx, server, local_path, container_path):
     try:
         ssh_client = provisioner.get_ssh_client(record.id)
         docker = RemoteDocker(ssh_client)
+        container_name = provisioner._resolve_container(record.id, docker)
 
         remote_tmp = f"/tmp/{_uuid.uuid4().hex[:8]}"
         ssh_client.upload_file(local_path, remote_tmp)
-        docker.cp_to(record.container_name, remote_tmp, container_path)
+        docker.cp_to(container_name, remote_tmp, container_path)
         progress.finish()
     except KeyboardInterrupt:
         progress.fail("Interrupted")
@@ -645,6 +643,7 @@ def download(ctx, server, container_path, local_path):
     import uuid as _uuid
 
     provisioner = _make_provisioner(ctx)
+    provisioner.auto_reconcile()
     record = provisioner.state.get_by_name_or_id(server)
     if not record:
         console.print(f"[red]Server not found: {server}[/]")
@@ -656,9 +655,10 @@ def download(ctx, server, container_path, local_path):
     try:
         ssh_client = provisioner.get_ssh_client(record.id)
         docker = RemoteDocker(ssh_client)
+        container_name = provisioner._resolve_container(record.id, docker)
 
         remote_tmp = f"/tmp/{_uuid.uuid4().hex[:8]}"
-        docker.cp_from(record.container_name, container_path, remote_tmp)
+        docker.cp_from(container_name, container_path, remote_tmp)
         ssh_client.download_file(remote_tmp, local_path)
         progress.finish()
     except KeyboardInterrupt:
@@ -681,6 +681,7 @@ def download(ctx, server, container_path, local_path):
 def pause(ctx, server):
     """Pause a server (stop instance, keep data)."""
     provisioner = _make_provisioner(ctx)
+    provisioner.auto_reconcile()
     record = provisioner.state.get_by_name_or_id(server)
     if not record:
         console.print(f"[red]Server not found: {server}[/]")
@@ -713,6 +714,7 @@ def pause(ctx, server):
 def resume(ctx, server):
     """Resume a paused server."""
     provisioner = _make_provisioner(ctx)
+    provisioner.auto_reconcile()
     record = provisioner.state.get_by_name_or_id(server)
     if not record:
         console.print(f"[red]Server not found: {server}[/]")
@@ -745,6 +747,7 @@ def resume(ctx, server):
 def pin(ctx, server):
     """Pin a static Elastic IP to a server."""
     provisioner = _make_provisioner(ctx)
+    provisioner.auto_reconcile()
     record = provisioner.state.get_by_name_or_id(server)
     if not record:
         console.print(f"[red]Server not found: {server}[/]")
@@ -779,6 +782,7 @@ def pin(ctx, server):
 def unpin(ctx, server, yes):
     """Remove the pinned Elastic IP from a server."""
     provisioner = _make_provisioner(ctx)
+    provisioner.auto_reconcile()
     record = provisioner.state.get_by_name_or_id(server)
     if not record:
         console.print(f"[red]Server not found: {server}[/]")
@@ -815,6 +819,7 @@ def unpin(ctx, server, yes):
 def eips(ctx, cleanup):
     """List all GSM-managed Elastic IPs."""
     provisioner = _make_provisioner(ctx)
+    provisioner.auto_reconcile()
     try:
         eip_list = provisioner.list_eips()
     except Exception as e:
@@ -859,6 +864,7 @@ def eips(ctx, cleanup):
 def snapshot(ctx, server):
     """Create a snapshot of a server."""
     provisioner = _make_provisioner(ctx)
+    provisioner.auto_reconcile()
     record = provisioner.state.get_by_name_or_id(server)
     if not record:
         console.print(f"[red]Server not found: {server}[/]")
@@ -891,10 +897,7 @@ def snapshot(ctx, server):
 def snapshots():
     """List all snapshots."""
     provisioner = Provisioner()
-    try:
-        provisioner.reconcile(extra_regions={"us-east-1"})
-    except Exception:
-        console.print("[yellow]Warning: Could not sync with AWS. Showing cached state.[/]")
+    provisioner.auto_reconcile()
     snaps = provisioner.list_snapshots()
     if not snaps:
         console.print("No snapshots.")
@@ -922,6 +925,7 @@ def snapshots():
 def snapshot_delete(ctx, snapshot_id, yes):
     """Delete a snapshot."""
     provisioner = Provisioner()
+    provisioner.auto_reconcile()
     snap = provisioner.snapshot_state.get(snapshot_id)
     if not snap:
         console.print(f"[red]Snapshot not found: {snapshot_id}[/]")

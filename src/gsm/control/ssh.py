@@ -128,17 +128,21 @@ def ensure_key_pair(region: str, key_dir: Path = DEFAULT_KEY_DIR) -> Path:
     key_dir.mkdir(parents=True, exist_ok=True)
     key_path = key_dir / f"{KEY_NAME}.pem"
 
-    if not key_path.exists():
-        # Try to fetch the shared key from SSM (another machine may have created it)
-        if not _fetch_key_from_ssm(key_path):
-            # No shared key exists yet — generate one
-            key = paramiko.RSAKey.generate(4096)
-            key.write_private_key_file(str(key_path))
-            key_path.chmod(0o600)
-            if not _store_key_in_ssm(key_path):
-                # put_parameter failed — another machine may have raced us.
-                # Try fetching theirs so all machines converge on the same key.
-                _fetch_key_from_ssm(key_path)
+    # SSM is the source of truth — always check it first.
+    # This ensures all machines converge on the same key, even if
+    # a local key already exists from before SSM was introduced.
+    if _fetch_key_from_ssm(key_path):
+        pass  # Got the shared key from SSM
+    elif not key_path.exists():
+        # No SSM key and no local key — generate one
+        key = paramiko.RSAKey.generate(4096)
+        key.write_private_key_file(str(key_path))
+        key_path.chmod(0o600)
+
+    # Ensure local key is in SSM (first machine to run stores it).
+    # If store fails, another machine may have raced us — fetch theirs.
+    if not _store_key_in_ssm(key_path):
+        _fetch_key_from_ssm(key_path)
 
     # Ensure the EC2 key pair in this region matches the local key
     public_key = _get_public_key_from_private(key_path)

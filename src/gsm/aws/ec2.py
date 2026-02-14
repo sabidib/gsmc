@@ -14,8 +14,25 @@ def launch_instance(
     security_group_id: str, subnet_id: str | None = None,
     game_name: str = "", server_id: str = "", server_name: str = "",
     disk_gb: int = 100,
+    ports_tag: str = "", rcon_password: str = "",
+    container_name: str = "", launch_time: str = "",
 ) -> str:
     ec2 = boto3.client("ec2", region_name=region)
+    tags = [
+        {"Key": "Name", "Value": f"gsm-{game_name}-{server_name}"},
+        {"Key": "gsm:game", "Value": game_name},
+        {"Key": "gsm:id", "Value": server_id},
+        {"Key": "gsm:name", "Value": server_name},
+        {"Key": "gsm:sg-id", "Value": security_group_id},
+    ]
+    if ports_tag:
+        tags.append({"Key": "gsm:ports", "Value": ports_tag})
+    if rcon_password:
+        tags.append({"Key": "gsm:rcon-password", "Value": rcon_password})
+    if container_name:
+        tags.append({"Key": "gsm:container-name", "Value": container_name})
+    if launch_time:
+        tags.append({"Key": "gsm:launch-time", "Value": launch_time})
     kwargs = {
         "ImageId": ami_id, "InstanceType": instance_type,
         "KeyName": key_name, "SecurityGroupIds": [security_group_id],
@@ -26,12 +43,7 @@ def launch_instance(
         }],
         "TagSpecifications": [{
             "ResourceType": "instance",
-            "Tags": [
-                {"Key": "Name", "Value": f"gsm-{game_name}-{server_name}"},
-                {"Key": "gsm:game", "Value": game_name},
-                {"Key": "gsm:id", "Value": server_id},
-                {"Key": "gsm:name", "Value": server_name},
-            ],
+            "Tags": tags,
         }],
     }
     if subnet_id:
@@ -61,6 +73,13 @@ def find_gsm_instances(region: str) -> list[dict]:
                     "gsm_id": tags.get("gsm:id", ""),
                     "gsm_game": tags.get("gsm:game", ""),
                     "gsm_name": tags.get("gsm:name", ""),
+                    "gsm_ports": tags.get("gsm:ports", ""),
+                    "gsm_rcon_password": tags.get("gsm:rcon-password", ""),
+                    "gsm_sg_id": tags.get("gsm:sg-id", ""),
+                    "gsm_eip_alloc_id": tags.get("gsm:eip-alloc-id", ""),
+                    "gsm_container_name": tags.get("gsm:container-name", ""),
+                    "gsm_launch_time": tags.get("gsm:launch-time", ""),
+                    "gsm_container_stopped": tags.get("gsm:container-stopped", ""),
                 })
     return results
 
@@ -99,6 +118,16 @@ def wait_for_instance_stopped(region: str, instance_id: str) -> None:
     ec2 = boto3.client("ec2", region_name=region)
     waiter = ec2.get_waiter("instance_stopped")
     waiter.wait(InstanceIds=[instance_id])
+
+
+def set_instance_tag(region: str, instance_id: str, key: str, value: str) -> None:
+    ec2 = boto3.client("ec2", region_name=region)
+    ec2.create_tags(Resources=[instance_id], Tags=[{"Key": key, "Value": value}])
+
+
+def delete_instance_tag(region: str, instance_id: str, key: str) -> None:
+    ec2 = boto3.client("ec2", region_name=region)
+    ec2.delete_tags(Resources=[instance_id], Tags=[{"Key": key}])
 
 
 def get_instance_root_volume_id(region: str, instance_id: str) -> str:
