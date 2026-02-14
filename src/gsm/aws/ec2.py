@@ -84,6 +84,21 @@ def find_gsm_instances(region: str) -> list[dict]:
     return results
 
 
+def find_gsm_key_pairs(region: str) -> list[dict]:
+    """Find gsm-key key pairs in a region."""
+    ec2 = boto3.client("ec2", region_name=region)
+    response = ec2.describe_key_pairs(
+        Filters=[{"Name": "key-name", "Values": ["gsm-key"]}],
+    )
+    results = []
+    for kp in response["KeyPairs"]:
+        results.append({
+            "key_name": kp["KeyName"],
+            "key_pair_id": kp.get("KeyPairId", ""),
+        })
+    return results
+
+
 def terminate_instance(region: str, instance_id: str) -> None:
     ec2 = boto3.client("ec2", region_name=region)
     ec2.terminate_instances(InstanceIds=[instance_id])

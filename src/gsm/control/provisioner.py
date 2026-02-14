@@ -16,14 +16,15 @@ from gsm.aws.ec2 import (
     set_instance_tag,
     delete_instance_tag,
 )
-from gsm.aws.security_groups import get_or_create_security_group
+from gsm.aws.security_groups import get_or_create_security_group, find_gsm_security_groups
 from gsm.control.docker import RemoteDocker
-from gsm.control.ssh import SSHClient, ensure_key_pair, KEY_NAME
+from gsm.control.ssh import SSHClient, ensure_key_pair, KEY_NAME, SSM_REGION
 from gsm.aws.ebs import (
     create_snapshot,
     wait_for_snapshot_complete,
     delete_snapshot as aws_delete_snapshot,
     find_amis_using_snapshot,
+    find_gsm_amis,
     register_ami_from_snapshot,
     deregister_ami,
     list_snapshots as aws_list_snapshots,
@@ -35,7 +36,7 @@ from gsm.aws.eip import (
     release_eip,
     find_gsm_eips,
 )
-from gsm.aws.ec2 import get_instance_root_volume_id
+from gsm.aws.ec2 import get_instance_root_volume_id, find_gsm_key_pairs
 from gsm.control.state import ServerState, ServerRecord, SnapshotState, SnapshotRecord
 from gsm.games.registry import GameDefinition
 
@@ -146,7 +147,6 @@ class Provisioner:
 
     def _get_active_regions(self) -> set[str]:
         """Read active regions from SSM Parameter Store."""
-        from gsm.control.ssh import SSM_REGION
         ssm = boto3.client("ssm", region_name=SSM_REGION)
         try:
             response = ssm.get_parameter(Name=self.SSM_ACTIVE_REGIONS_PARAM)
@@ -163,7 +163,6 @@ class Provisioner:
         if region in current:
             return
         current.add(region)
-        from gsm.control.ssh import SSM_REGION
         ssm = boto3.client("ssm", region_name=SSM_REGION)
         ssm.put_parameter(
             Name=self.SSM_ACTIVE_REGIONS_PARAM,
@@ -181,7 +180,6 @@ class Provisioner:
         if region not in current:
             return
         current.discard(region)
-        from gsm.control.ssh import SSM_REGION
         ssm = boto3.client("ssm", region_name=SSM_REGION)
         if current:
             ssm.put_parameter(
@@ -1191,3 +1189,104 @@ class Provisioner:
             ttl_file.write_text(str(time.time()))
         except Exception:
             pass
+
+    def list_all_resources(self, include_free: bool = False) -> dict[str, list[dict]]:
+        """Query all GSM-managed AWS resources across active regions.
+
+        Returns a dict keyed by resource type, each value a list of dicts.
+        By default only includes paid resources. Set include_free=True for all.
+        """
+        regions = set()
+        for r in self.state.list_all():
+            regions.add(r.region)
+        try:
+            regions.update(self._get_active_regions())
+        except Exception:
+            pass
+        if not regions:
+            regions.add("us-east-1")
+
+        resources: dict[str, list[dict]] = {
+            "instances": [],
+            "eips": [],
+            "snapshots": [],
+            "amis": [],
+        }
+        if include_free:
+            resources["security_groups"] = []
+            resources["key_pairs"] = []
+            resources["ssm_parameters"] = []
+
+        for region in sorted(regions):
+            self._notify(f"Scanning {region}")
+
+            for inst in find_gsm_instances(region):
+                inst["region"] = region
+                resources["instances"].append(inst)
+
+            for addr in find_gsm_eips(region):
+                tags = {t["Key"]: t["Value"] for t in addr.get("Tags", [])}
+                resources["eips"].append({
+                    "allocation_id": addr["AllocationId"],
+                    "public_ip": addr.get("PublicIp", ""),
+                    "region": region,
+                    "server_id": tags.get("gsm:id", ""),
+                    "associated": bool(addr.get("AssociationId")),
+                })
+
+            for snap in aws_list_snapshots(region):
+                tags = {t["Key"]: t["Value"] for t in snap.get("Tags", [])}
+                resources["snapshots"].append({
+                    "snapshot_id": snap["SnapshotId"],
+                    "state": snap.get("State", ""),
+                    "size_gb": snap.get("VolumeSize", 0),
+                    "region": region,
+                    "server_id": tags.get("gsm:id", ""),
+                    "description": snap.get("Description", ""),
+                })
+
+            for ami in find_gsm_amis(region):
+                ami["region"] = region
+                resources["amis"].append(ami)
+
+            if include_free:
+                for sg in find_gsm_security_groups(region):
+                    sg["region"] = region
+                    resources["security_groups"].append(sg)
+
+                for kp in find_gsm_key_pairs(region):
+                    kp["region"] = region
+                    resources["key_pairs"].append(kp)
+
+        if include_free:
+            # SSM parameters under /gsmc/ prefix
+            try:
+                ssm = boto3.client("ssm", region_name=SSM_REGION)
+                paginator = ssm.get_paginator("describe_parameters")
+                for page in paginator.paginate(
+                    ParameterFilters=[{
+                        "Key": "Name",
+                        "Option": "BeginsWith",
+                        "Values": ["/gsmc/"],
+                    }],
+                ):
+                    for param in page["Parameters"]:
+                        # Fetch the value
+                        name = param["Name"]
+                        try:
+                            val_resp = ssm.get_parameter(Name=name, WithDecryption=True)
+                            value = val_resp["Parameter"]["Value"]
+                        except Exception:
+                            value = "<error reading>"
+                        # Mask the SSH private key
+                        if "ssh" in name.lower() and "key" in name.lower():
+                            value = "****"
+                        resources["ssm_parameters"].append({
+                            "name": name,
+                            "type": param.get("Type", ""),
+                            "value": value,
+                        })
+            except Exception:
+                pass
+
+        return resources

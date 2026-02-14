@@ -859,6 +859,135 @@ def eips(ctx, cleanup):
 
 
 @cli.command()
+@click.option("--all", "show_all", is_flag=True, help="Include free resources (SGs, key pairs, SSM params)")
+@click.pass_context
+def resources(ctx, show_all):
+    """Show all GSM-managed AWS resources."""
+    provisioner = _make_provisioner(ctx)
+    progress = StepProgress(mode=_progress_mode(ctx))
+    provisioner.on_status = progress.update
+    try:
+        data = provisioner.list_all_resources(include_free=show_all)
+        progress.finish()
+    except KeyboardInterrupt:
+        progress.fail("Interrupted")
+        console.print("\n[yellow]Interrupted.[/]")
+        raise SystemExit(130)
+    except Exception as e:
+        progress.fail(str(e))
+        console.print(f"[bold red]Error:[/] {e}")
+        raise SystemExit(1)
+
+    total = 0
+
+    # EC2 Instances
+    if data.get("instances"):
+        table = Table(title="EC2 Instances")
+        table.add_column("Instance ID", style="cyan")
+        table.add_column("State", style="green")
+        table.add_column("Game", style="yellow")
+        table.add_column("Name", style="magenta")
+        table.add_column("IP")
+        table.add_column("Region")
+        for inst in data["instances"]:
+            table.add_row(
+                inst["instance_id"], inst["state"], inst.get("gsm_game", ""),
+                inst.get("gsm_name", ""), inst.get("public_ip") or "", inst.get("region", ""),
+            )
+        console.print(table)
+        total += len(data["instances"])
+
+    # Elastic IPs
+    if data.get("eips"):
+        table = Table(title="Elastic IPs")
+        table.add_column("Allocation ID", style="cyan")
+        table.add_column("Public IP", style="green")
+        table.add_column("Server ID", style="yellow")
+        table.add_column("Status")
+        table.add_column("Region")
+        for eip in data["eips"]:
+            status = "associated" if eip["associated"] else "unassociated"
+            table.add_row(
+                eip["allocation_id"], eip["public_ip"], eip["server_id"],
+                status, eip["region"],
+            )
+        console.print(table)
+        total += len(data["eips"])
+
+    # EBS Snapshots
+    if data.get("snapshots"):
+        table = Table(title="EBS Snapshots")
+        table.add_column("Snapshot ID", style="cyan")
+        table.add_column("State", style="green")
+        table.add_column("Size (GB)", style="yellow")
+        table.add_column("Server ID")
+        table.add_column("Region")
+        table.add_column("Description", style="dim")
+        for snap in data["snapshots"]:
+            table.add_row(
+                snap["snapshot_id"], snap["state"], str(snap["size_gb"]),
+                snap["server_id"], snap["region"], snap["description"],
+            )
+        console.print(table)
+        total += len(data["snapshots"])
+
+    # AMIs
+    if data.get("amis"):
+        table = Table(title="AMIs")
+        table.add_column("Image ID", style="cyan")
+        table.add_column("Name", style="green")
+        table.add_column("State", style="yellow")
+        table.add_column("Region")
+        table.add_column("Created", style="dim")
+        for ami in data["amis"]:
+            table.add_row(
+                ami["image_id"], ami["name"], ami["state"],
+                ami["region"], ami["creation_date"],
+            )
+        console.print(table)
+        total += len(data["amis"])
+
+    # Security Groups (free, --all only)
+    if data.get("security_groups"):
+        table = Table(title="Security Groups")
+        table.add_column("Group ID", style="cyan")
+        table.add_column("Name", style="green")
+        table.add_column("VPC", style="yellow")
+        table.add_column("Region")
+        for sg in data["security_groups"]:
+            table.add_row(sg["group_id"], sg["group_name"], sg["vpc_id"], sg["region"])
+        console.print(table)
+        total += len(data["security_groups"])
+
+    # Key Pairs (free, --all only)
+    if data.get("key_pairs"):
+        table = Table(title="Key Pairs")
+        table.add_column("Key Name", style="cyan")
+        table.add_column("Key Pair ID", style="green")
+        table.add_column("Region")
+        for kp in data["key_pairs"]:
+            table.add_row(kp["key_name"], kp["key_pair_id"], kp["region"])
+        console.print(table)
+        total += len(data["key_pairs"])
+
+    # SSM Parameters (free, --all only)
+    if data.get("ssm_parameters"):
+        table = Table(title="SSM Parameters")
+        table.add_column("Name", style="cyan")
+        table.add_column("Type", style="green")
+        table.add_column("Value", style="yellow")
+        for param in data["ssm_parameters"]:
+            table.add_row(param["name"], param["type"], param["value"])
+        console.print(table)
+        total += len(data["ssm_parameters"])
+
+    if total == 0:
+        console.print("No GSM resources found.")
+    else:
+        console.print(f"\n[bold]{total}[/] resource(s) found.")
+
+
+@cli.command()
 @click.argument("server", shell_complete=_complete_server)
 @click.pass_context
 def snapshot(ctx, server):

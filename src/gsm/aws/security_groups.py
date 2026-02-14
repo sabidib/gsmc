@@ -41,3 +41,19 @@ def get_or_create_security_group(
 
     ec2.authorize_security_group_ingress(GroupId=sg_id, IpPermissions=ip_permissions)
     return sg_id
+
+
+def find_gsm_security_groups(region: str) -> list[dict]:
+    """Find all security groups tagged with gsm:id in a region."""
+    ec2 = boto3.client("ec2", region_name=region)
+    response = ec2.describe_security_groups(
+        Filters=[{"Name": "tag-key", "Values": ["gsm:id"]}],
+    )
+    results = []
+    for sg in response["SecurityGroups"]:
+        results.append({
+            "group_id": sg["GroupId"],
+            "group_name": sg["GroupName"],
+            "vpc_id": sg.get("VpcId", ""),
+        })
+    return results

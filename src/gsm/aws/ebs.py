@@ -71,6 +71,24 @@ def find_amis_using_snapshot(region: str, snapshot_id: str) -> list[str]:
     return result
 
 
+def find_gsm_amis(region: str) -> list[dict]:
+    """Find all self-owned AMIs with gsm- name prefix in a region."""
+    ec2 = boto3.client("ec2", region_name=region)
+    response = ec2.describe_images(
+        Owners=["self"],
+        Filters=[{"Name": "name", "Values": ["gsm-*"]}],
+    )
+    results = []
+    for img in response.get("Images", []):
+        results.append({
+            "image_id": img["ImageId"],
+            "name": img.get("Name", ""),
+            "state": img.get("State", ""),
+            "creation_date": img.get("CreationDate", ""),
+        })
+    return results
+
+
 def deregister_ami(region: str, ami_id: str) -> None:
     ec2 = boto3.client("ec2", region_name=region)
     ec2.deregister_image(ImageId=ami_id)
