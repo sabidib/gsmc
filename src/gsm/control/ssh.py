@@ -1,12 +1,16 @@
+import hashlib
 import time
 from pathlib import Path
 
 import boto3
 import paramiko
+from cryptography.hazmat.primitives.serialization import Encoding, PublicFormat
 
 
 DEFAULT_KEY_DIR = Path.home() / ".gsm" / "keys"
 KEY_NAME = "gsm-key"
+SSM_KEY_PARAM = "/gsmc/ssh-private-key"
+SSM_REGION = "us-east-1"
 
 
 class SSHClient:
@@ -84,33 +88,70 @@ class SSHClient:
             self._client = None
 
 
+def _fetch_key_from_ssm(key_path: Path) -> bool:
+    """Try to download the shared SSH key from SSM Parameter Store.
+    Returns True if the key was fetched and saved locally."""
+    try:
+        ssm = boto3.client("ssm", region_name=SSM_REGION)
+        response = ssm.get_parameter(Name=SSM_KEY_PARAM, WithDecryption=True)
+        key_path.write_text(response["Parameter"]["Value"])
+        key_path.chmod(0o600)
+        return True
+    except Exception:
+        return False
+
+
+def _store_key_in_ssm(key_path: Path) -> bool:
+    """Upload the SSH private key to SSM Parameter Store.
+    Returns True if stored successfully, False otherwise."""
+    try:
+        ssm = boto3.client("ssm", region_name=SSM_REGION)
+        ssm.put_parameter(
+            Name=SSM_KEY_PARAM,
+            Value=key_path.read_text(),
+            Type="SecureString",
+        )
+        return True
+    except Exception:
+        return False
+
+
+def _compute_fingerprint(key_path: Path) -> str:
+    """Compute the MD5 fingerprint AWS uses for imported key pairs."""
+    key = paramiko.RSAKey.from_private_key_file(str(key_path))
+    pub_der = key.key.public_key().public_bytes(Encoding.DER, PublicFormat.SubjectPublicKeyInfo)
+    digest = hashlib.md5(pub_der).hexdigest()
+    return ":".join(digest[i:i + 2] for i in range(0, len(digest), 2))
+
+
 def ensure_key_pair(region: str, key_dir: Path = DEFAULT_KEY_DIR) -> Path:
     key_dir.mkdir(parents=True, exist_ok=True)
     key_path = key_dir / f"{KEY_NAME}.pem"
 
-    if key_path.exists():
-        ec2 = boto3.client("ec2", region_name=region)
-        try:
-            ec2.describe_key_pairs(KeyNames=[KEY_NAME])
-        except Exception:
-            public_key = _get_public_key_from_private(key_path)
-            ec2.import_key_pair(KeyName=KEY_NAME, PublicKeyMaterial=public_key)
-        return key_path
+    if not key_path.exists():
+        # Try to fetch the shared key from SSM (another machine may have created it)
+        if not _fetch_key_from_ssm(key_path):
+            # No shared key exists yet — generate one
+            key = paramiko.RSAKey.generate(4096)
+            key.write_private_key_file(str(key_path))
+            key_path.chmod(0o600)
+            if not _store_key_in_ssm(key_path):
+                # put_parameter failed — another machine may have raced us.
+                # Try fetching theirs so all machines converge on the same key.
+                _fetch_key_from_ssm(key_path)
 
-    key = paramiko.RSAKey.generate(4096)
-    key.write_private_key_file(str(key_path))
-    key_path.chmod(0o600)
-
-    import io
-    public_key_io = io.StringIO()
-    key.write_private_key(public_key_io)
-    public_key_bytes = f"{key.get_name()} {key.get_base64()}".encode()
-
+    # Ensure the EC2 key pair in this region matches the local key
+    public_key = _get_public_key_from_private(key_path)
+    local_fp = _compute_fingerprint(key_path)
     ec2 = boto3.client("ec2", region_name=region)
     try:
-        ec2.describe_key_pairs(KeyNames=[KEY_NAME])
+        existing = ec2.describe_key_pairs(KeyNames=[KEY_NAME])
+        if existing["KeyPairs"][0]["KeyFingerprint"] == local_fp:
+            return key_path
+        ec2.delete_key_pair(KeyName=KEY_NAME)
     except Exception:
-        ec2.import_key_pair(KeyName=KEY_NAME, PublicKeyMaterial=public_key_bytes)
+        pass
+    ec2.import_key_pair(KeyName=KEY_NAME, PublicKeyMaterial=public_key)
 
     return key_path
 

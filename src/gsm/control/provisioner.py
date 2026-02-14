@@ -1,7 +1,6 @@
 import uuid
 
 import boto3
-import urllib.request
 from botocore.exceptions import ClientError
 
 from gsm.aws.ami import get_latest_al2023_ami
@@ -15,7 +14,7 @@ from gsm.aws.ec2 import (
     start_instance,
     wait_for_instance_stopped,
 )
-from gsm.aws.security_groups import get_or_create_security_group, update_ssh_cidr
+from gsm.aws.security_groups import get_or_create_security_group
 from gsm.control.docker import RemoteDocker
 from gsm.control.ssh import SSHClient, ensure_key_pair, KEY_NAME
 from gsm.aws.ebs import (
@@ -75,12 +74,6 @@ def _parse_env_file(path: str) -> dict[str, str]:
                 value = value[1:-1]
             config[key.strip()] = value
     return config
-
-
-def get_my_public_ip() -> str:
-    """Get the caller's public IP using AWS checkip service."""
-    response = urllib.request.urlopen("https://checkip.amazonaws.com", timeout=10)
-    return response.read().decode().strip()
 
 
 def _is_client_error(exc: ClientError, code: str) -> bool:
@@ -264,11 +257,6 @@ class Provisioner:
                     f"  gsm launch {game.name} --config-file {game.name}.cfg"
                 )
 
-        # Get my IP for SSH access
-        self._notify("Getting public IP")
-        my_ip = get_my_public_ip()
-        ssh_cidr = f"{my_ip}/32"
-
         # Get default VPC and subnet
         self._notify("Finding default VPC")
         vpc_id, subnet_id = get_default_vpc_and_subnet(region)
@@ -298,7 +286,7 @@ class Provisioner:
         self._notify("Creating security group")
         sg_id = get_or_create_security_group(
             region=region, game_name=game.name, ports=game.ports,
-            ssh_cidr=ssh_cidr, vpc_id=vpc_id,
+            vpc_id=vpc_id,
         )
 
         # Launch instance
@@ -634,13 +622,6 @@ class Provisioner:
         self.state.update_field(server_id, "public_ip", new_ip)
         # Instance IS running — update state now, before Docker
         self.state.update_status(server_id, "running")
-
-        my_ip = get_my_public_ip()
-        try:
-            update_ssh_cidr(record.region, record.security_group_id,
-                            f"{record.public_ip}/32", f"{my_ip}/32")
-        except Exception:
-            pass
 
         self._notify("Connecting via SSH")
         ssh = None

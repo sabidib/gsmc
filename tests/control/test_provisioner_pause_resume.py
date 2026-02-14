@@ -98,9 +98,6 @@ def test_resume_server(mock_remote_deps, make_server_record, tmp_path):
 
     mock_remote_deps.mocks["start_instance"].assert_called_once_with("us-east-1", "i-test123")
     mock_remote_deps.mocks["wait_for_instance_running"].assert_called_once_with("us-east-1", "i-test123")
-    mock_remote_deps.mocks["update_ssh_cidr"].assert_called_once_with(
-        "us-east-1", "sg-test123", "54.1.2.3/32", "10.0.0.1/32",
-    )
     mock_remote_deps.docker.start.assert_called_once_with("gsm-factorio-srv-1")
     assert record.status == "running"
     assert record.public_ip == "54.9.8.7"

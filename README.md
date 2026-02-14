@@ -391,7 +391,7 @@ State is tracked locally in `~/.gsm/`:
 |------|----------|
 | `servers.json` | Active server records |
 | `snapshots.json` | Snapshot records |
-| `gsm-keypair.pem` | Auto-generated SSH key |
+| `keys/gsm-key.pem` | Auto-generated SSH key (shared across machines via SSM) |
 | `lgsm_catalog.json` | LinuxGSM game catalog |
 | `lgsm_data.json` | LinuxGSM config data |
 
@@ -457,7 +457,7 @@ gsmc api --port 9000 --host 0.0.0.0
 - AWS credentials configured via `~/.aws/credentials`, environment variables, or an AWS profile
 - The [minimum IAM policy](examples/iam-policy.json) applied to your user/role
 
-Required permissions: EC2 instances, security groups, key pairs, EBS volumes/snapshots, Elastic IPs.
+Required permissions: EC2 instances, security groups, key pairs, EBS volumes/snapshots, Elastic IPs, SSM Parameter Store (for SSH key sharing across machines).
 
 ### Cost estimates
 

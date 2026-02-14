@@ -111,7 +111,6 @@ def mock_launch_deps(monkeypatch):
     """
     defaults = {
         "get_default_vpc_and_subnet": ("vpc-123", "subnet-123"),
-        "get_my_public_ip": "203.0.113.1",
         "get_latest_al2023_ami": "ami-test123",
         "get_or_create_security_group": "sg-test123",
         "launch_instance": "i-test123",
@@ -160,8 +159,6 @@ def mock_remote_deps(monkeypatch):
         "start_instance": None,
         "wait_for_instance_running": None,
         "get_instance_public_ip": "54.9.8.7",
-        "get_my_public_ip": "10.0.0.1",
-        "update_ssh_cidr": None,
     }
     mocks = {}
     for name, rv in defaults.items():

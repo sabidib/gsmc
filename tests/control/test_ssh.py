@@ -93,13 +93,163 @@ def test_ssh_connect_and_close(mock_paramiko_cls):
     mock_ssh.close.assert_called_once()
 
 
+def _mock_boto3_clients(mock_boto3):
+    """Set up mock boto3 to return separate EC2 and SSM clients."""
+    mock_ec2 = MagicMock()
+    mock_ssm = MagicMock()
+
+    def client_factory(service="ec2", **kwargs):
+        if service == "ssm":
+            return mock_ssm
+        return mock_ec2
+
+    mock_boto3.client.side_effect = client_factory
+    return mock_ec2, mock_ssm
+
+
 def test_ensure_key_pair_creates_key(tmp_path):
+    """No local key, no SSM key → generates new key and stores in SSM."""
     key_dir = tmp_path / "keys"
     with patch("gsm.control.ssh.boto3") as mock_boto3:
-        mock_ec2 = MagicMock()
-        mock_boto3.client.return_value = mock_ec2
+        mock_ec2, mock_ssm = _mock_boto3_clients(mock_boto3)
+        # SSM has no key
+        mock_ssm.get_parameter.side_effect = Exception("ParameterNotFound")
+        mock_ssm.put_parameter.return_value = {}
+        # EC2 has no key pair
         mock_ec2.describe_key_pairs.side_effect = Exception("not found")
         mock_ec2.import_key_pair.return_value = {}
+
         key_path = ensure_key_pair("us-east-1", key_dir=key_dir)
         assert key_path.exists()
         assert key_path.name == "gsm-key.pem"
+        # Key was uploaded to SSM
+        mock_ssm.put_parameter.assert_called_once()
+
+
+def test_ensure_key_pair_fetches_from_ssm(tmp_path):
+    """No local key, SSM has key → fetches from SSM instead of generating."""
+    key_dir = tmp_path / "keys"
+    key_dir.mkdir(parents=True)
+    # Create a "remote" key to put in SSM
+    import paramiko as _paramiko
+    import io
+    remote_key = _paramiko.RSAKey.generate(2048)
+    buf = io.StringIO()
+    remote_key.write_private_key(buf)
+    ssm_key_pem = buf.getvalue()
+
+    with patch("gsm.control.ssh.boto3") as mock_boto3:
+        mock_ec2, mock_ssm = _mock_boto3_clients(mock_boto3)
+        mock_ssm.get_parameter.return_value = {
+            "Parameter": {"Value": ssm_key_pem}
+        }
+        # EC2 has no key pair
+        mock_ec2.describe_key_pairs.side_effect = Exception("not found")
+        mock_ec2.import_key_pair.return_value = {}
+
+        key_path = ensure_key_pair("us-east-1", key_dir=key_dir)
+        assert key_path.exists()
+        assert key_path.read_text() == ssm_key_pem
+        # Should NOT have stored to SSM
+        mock_ssm.put_parameter.assert_not_called()
+
+
+def test_ensure_key_pair_ssm_unavailable_falls_back(tmp_path):
+    """No local key, SSM fails → generates locally without SSM."""
+    key_dir = tmp_path / "keys"
+    with patch("gsm.control.ssh.boto3") as mock_boto3:
+        mock_ec2, mock_ssm = _mock_boto3_clients(mock_boto3)
+        # SSM completely unavailable
+        mock_ssm.get_parameter.side_effect = Exception("AccessDenied")
+        mock_ssm.put_parameter.side_effect = Exception("AccessDenied")
+        # EC2 has no key pair
+        mock_ec2.describe_key_pairs.side_effect = Exception("not found")
+        mock_ec2.import_key_pair.return_value = {}
+
+        key_path = ensure_key_pair("us-east-1", key_dir=key_dir)
+        assert key_path.exists()
+        assert key_path.name == "gsm-key.pem"
+
+
+def test_ensure_key_pair_local_key_exists_skips_ssm(tmp_path):
+    """Local key exists → skips SSM entirely, just ensures EC2 key pair."""
+    key_dir = tmp_path / "keys"
+    key_dir.mkdir(parents=True)
+    key_path = key_dir / "gsm-key.pem"
+
+    import paramiko as _paramiko
+    key = _paramiko.RSAKey.generate(2048)
+    key.write_private_key_file(str(key_path))
+
+    with patch("gsm.control.ssh.boto3") as mock_boto3:
+        mock_ec2, mock_ssm = _mock_boto3_clients(mock_boto3)
+        # EC2 has no key pair
+        mock_ec2.describe_key_pairs.side_effect = Exception("not found")
+        mock_ec2.import_key_pair.return_value = {}
+
+        result = ensure_key_pair("us-east-1", key_dir=key_dir)
+        assert result == key_path
+        # SSM should not be called at all
+        mock_ssm.get_parameter.assert_not_called()
+        mock_ssm.put_parameter.assert_not_called()
+        # EC2 key pair should be imported
+        mock_ec2.import_key_pair.assert_called_once()
+
+
+def test_ensure_key_pair_skips_reimport_when_fingerprint_matches(tmp_path):
+    """Local key exists, EC2 key pair matches → no delete+import."""
+    key_dir = tmp_path / "keys"
+    key_dir.mkdir(parents=True)
+    key_path = key_dir / "gsm-key.pem"
+
+    import paramiko as _paramiko
+    key = _paramiko.RSAKey.generate(2048)
+    key.write_private_key_file(str(key_path))
+
+    from gsm.control.ssh import _compute_fingerprint
+    local_fp = _compute_fingerprint(key_path)
+
+    with patch("gsm.control.ssh.boto3") as mock_boto3:
+        mock_ec2, mock_ssm = _mock_boto3_clients(mock_boto3)
+        # EC2 key pair exists and fingerprint matches
+        mock_ec2.describe_key_pairs.return_value = {
+            "KeyPairs": [{"KeyFingerprint": local_fp}]
+        }
+
+        result = ensure_key_pair("us-east-1", key_dir=key_dir)
+        assert result == key_path
+        # Should NOT have deleted or imported
+        mock_ec2.delete_key_pair.assert_not_called()
+        mock_ec2.import_key_pair.assert_not_called()
+
+
+def test_ensure_key_pair_race_condition_converges(tmp_path):
+    """Two machines race to store key — loser fetches winner's key."""
+    key_dir = tmp_path / "keys"
+
+    # Create the "winner's" key that will be in SSM after the race
+    import paramiko as _paramiko
+    import io
+    winner_key = _paramiko.RSAKey.generate(2048)
+    buf = io.StringIO()
+    winner_key.write_private_key(buf)
+    winner_pem = buf.getvalue()
+
+    with patch("gsm.control.ssh.boto3") as mock_boto3:
+        mock_ec2, mock_ssm = _mock_boto3_clients(mock_boto3)
+        # First get_parameter: no key yet
+        # Second get_parameter (after failed put): winner's key is there
+        mock_ssm.get_parameter.side_effect = [
+            Exception("ParameterNotFound"),
+            {"Parameter": {"Value": winner_pem}},
+        ]
+        # put_parameter fails (another machine stored first)
+        mock_ssm.put_parameter.side_effect = Exception("ParameterAlreadyExists")
+        # EC2 has no key pair
+        mock_ec2.describe_key_pairs.side_effect = Exception("not found")
+        mock_ec2.import_key_pair.return_value = {}
+
+        key_path = ensure_key_pair("us-east-1", key_dir=key_dir)
+        assert key_path.exists()
+        # Should have the winner's key
+        assert key_path.read_text() == winner_pem
