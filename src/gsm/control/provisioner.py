@@ -215,7 +215,7 @@ class Provisioner:
             "config": record.config,
             "rcon_password": record.rcon_password,
         })
-        ssh.run(f"mkdir -p /opt/gsm && cat > /opt/gsm/metadata.json << 'GSMEOF'\n{metadata}\nGSMEOF")
+        ssh.run(f"sudo mkdir -p /opt/gsm && sudo tee /opt/gsm/metadata.json > /dev/null << 'GSMEOF'\n{metadata}\nGSMEOF")
 
     def _read_metadata_file(self, ssh) -> dict:
         """Read server metadata from /opt/gsm/metadata.json on the EC2 host."""
@@ -390,7 +390,7 @@ class Provisioner:
 
         # Ensure SSH key pair
         self._notify("Ensuring SSH key pair")
-        key_path = ensure_key_pair(region)
+        key_path = ensure_key_pair(region, on_debug=self._debug_callback if self.debug else None)
 
         # Get AMI (from snapshot or latest AL2023)
         if from_snapshot:
@@ -711,7 +711,7 @@ class Provisioner:
         record = self.state.get(server_id)
         if not record:
             raise ValueError(f"Server {server_id} not found")
-        key_path = ensure_key_pair(record.region)
+        key_path = ensure_key_pair(record.region, on_debug=self._debug_callback if self.debug else None)
         ssh = SSHClient(host=record.public_ip, key_path=str(key_path), on_debug=self._debug_callback if self.debug else None)
         ssh.connect()
         return ssh
@@ -753,7 +753,7 @@ class Provisioner:
         self._notify("Stopping container")
         ssh = None
         try:
-            key_path = ensure_key_pair(record.region)
+            key_path = ensure_key_pair(record.region, on_debug=self._debug_callback if self.debug else None)
             ssh = SSHClient(host=record.public_ip, key_path=str(key_path), on_debug=self._debug_callback if self.debug else None)
             ssh.connect()
             docker = RemoteDocker(ssh)
@@ -825,7 +825,7 @@ class Provisioner:
         self._notify("Connecting via SSH")
         ssh = None
         try:
-            key_path = ensure_key_pair(record.region)
+            key_path = ensure_key_pair(record.region, on_debug=self._debug_callback if self.debug else None)
             ssh = SSHClient(host=new_ip, key_path=str(key_path), on_debug=self._debug_callback if self.debug else None)
             ssh.connect()
             docker = RemoteDocker(ssh)
@@ -850,7 +850,7 @@ class Provisioner:
     def _resume_container(self, server_id: str, record: ServerRecord) -> ServerRecord:
         """Resume a stopped container on an already-running instance."""
         self._notify("Connecting via SSH")
-        key_path = ensure_key_pair(record.region)
+        key_path = ensure_key_pair(record.region, on_debug=self._debug_callback if self.debug else None)
         ssh = SSHClient(host=record.public_ip, key_path=str(key_path), on_debug=self._debug_callback if self.debug else None)
         ssh.connect()
         try:
@@ -875,7 +875,7 @@ class Provisioner:
         if record.status != "running":
             raise ValueError(f"Server {server_id} is not running (status: {record.status})")
         self._notify("Connecting via SSH")
-        key_path = ensure_key_pair(record.region)
+        key_path = ensure_key_pair(record.region, on_debug=self._debug_callback if self.debug else None)
         ssh = SSHClient(host=record.public_ip, key_path=str(key_path), on_debug=self._debug_callback if self.debug else None)
         ssh.connect()
         try:

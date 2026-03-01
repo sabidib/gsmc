@@ -1,7 +1,15 @@
 from unittest.mock import MagicMock, patch
 from pathlib import Path
 
+import pytest
+from botocore.exceptions import ClientError
+
 from gsm.control.ssh import SSHClient, ensure_key_pair
+
+
+def _client_error(code, message=""):
+    """Create a botocore ClientError with the given error code."""
+    return ClientError({"Error": {"Code": code, "Message": message}}, "test")
 
 
 def test_ssh_client_init():
@@ -77,9 +85,10 @@ def test_ssh_run_debug_callback(mock_paramiko_cls):
     client = SSHClient(host="1.2.3.4", key_path="/tmp/test.pem", on_debug=debug_messages.append)
     client.connect()
     client.run("echo ok")
-    assert len(debug_messages) == 2
-    assert "$ echo ok" in debug_messages[0]
-    assert "exit=0" in debug_messages[1]
+    assert len(debug_messages) == 3
+    assert "SSH connected to 1.2.3.4" in debug_messages[0]
+    assert "$ echo ok" in debug_messages[1]
+    assert "exit=0" in debug_messages[2]
 
 
 @patch("gsm.control.ssh.paramiko.SSHClient")
@@ -113,10 +122,10 @@ def test_ensure_key_pair_creates_key(tmp_path):
     with patch("gsm.control.ssh.boto3") as mock_boto3:
         mock_ec2, mock_ssm = _mock_boto3_clients(mock_boto3)
         # SSM has no key
-        mock_ssm.get_parameter.side_effect = Exception("ParameterNotFound")
+        mock_ssm.get_parameter.side_effect = _client_error("ParameterNotFound")
         mock_ssm.put_parameter.return_value = {}
         # EC2 has no key pair
-        mock_ec2.describe_key_pairs.side_effect = Exception("not found")
+        mock_ec2.describe_key_pairs.side_effect = _client_error("InvalidKeyPair.NotFound")
         mock_ec2.import_key_pair.return_value = {}
 
         key_path = ensure_key_pair("us-east-1", key_dir=key_dir)
@@ -127,7 +136,7 @@ def test_ensure_key_pair_creates_key(tmp_path):
 
 
 def test_ensure_key_pair_fetches_from_ssm(tmp_path):
-    """No local key, SSM has key → fetches from SSM instead of generating."""
+    """No local key, SSM has key → fetches from SSM, skips store."""
     key_dir = tmp_path / "keys"
     key_dir.mkdir(parents=True)
     # Create a "remote" key to put in SSM
@@ -144,29 +153,26 @@ def test_ensure_key_pair_fetches_from_ssm(tmp_path):
             "Parameter": {"Value": ssm_key_pem}
         }
         # EC2 has no key pair
-        mock_ec2.describe_key_pairs.side_effect = Exception("not found")
+        mock_ec2.describe_key_pairs.side_effect = _client_error("InvalidKeyPair.NotFound")
         mock_ec2.import_key_pair.return_value = {}
 
         key_path = ensure_key_pair("us-east-1", key_dir=key_dir)
         assert key_path.exists()
         assert key_path.read_text() == ssm_key_pem
+        # Store should NOT be called — key was already in SSM
+        mock_ssm.put_parameter.assert_not_called()
 
 
-def test_ensure_key_pair_ssm_unavailable_falls_back(tmp_path):
-    """No local key, SSM fails → generates locally without SSM."""
+def test_ensure_key_pair_ssm_error_propagates(tmp_path):
+    """SSM permission error → raises instead of silently generating a new key."""
     key_dir = tmp_path / "keys"
     with patch("gsm.control.ssh.boto3") as mock_boto3:
         mock_ec2, mock_ssm = _mock_boto3_clients(mock_boto3)
-        # SSM completely unavailable
-        mock_ssm.get_parameter.side_effect = Exception("AccessDenied")
-        mock_ssm.put_parameter.side_effect = Exception("AccessDenied")
-        # EC2 has no key pair
-        mock_ec2.describe_key_pairs.side_effect = Exception("not found")
-        mock_ec2.import_key_pair.return_value = {}
+        mock_ssm.get_parameter.side_effect = _client_error("AccessDeniedException")
 
-        key_path = ensure_key_pair("us-east-1", key_dir=key_dir)
-        assert key_path.exists()
-        assert key_path.name == "gsm-key.pem"
+        with pytest.raises(ClientError) as exc_info:
+            ensure_key_pair("us-east-1", key_dir=key_dir)
+        assert exc_info.value.response["Error"]["Code"] == "AccessDeniedException"
 
 
 def test_ensure_key_pair_local_key_exists_uploads_to_ssm(tmp_path):
@@ -182,10 +188,10 @@ def test_ensure_key_pair_local_key_exists_uploads_to_ssm(tmp_path):
     with patch("gsm.control.ssh.boto3") as mock_boto3:
         mock_ec2, mock_ssm = _mock_boto3_clients(mock_boto3)
         # SSM has no key
-        mock_ssm.get_parameter.side_effect = Exception("ParameterNotFound")
+        mock_ssm.get_parameter.side_effect = _client_error("ParameterNotFound")
         mock_ssm.put_parameter.return_value = {}
         # EC2 has no key pair
-        mock_ec2.describe_key_pairs.side_effect = Exception("not found")
+        mock_ec2.describe_key_pairs.side_effect = _client_error("InvalidKeyPair.NotFound")
         mock_ec2.import_key_pair.return_value = {}
 
         result = ensure_key_pair("us-east-1", key_dir=key_dir)
@@ -223,13 +229,15 @@ def test_ensure_key_pair_ssm_overrides_local_key(tmp_path):
             "Parameter": {"Value": ssm_pem}
         }
         # EC2 has no key pair
-        mock_ec2.describe_key_pairs.side_effect = Exception("not found")
+        mock_ec2.describe_key_pairs.side_effect = _client_error("InvalidKeyPair.NotFound")
         mock_ec2.import_key_pair.return_value = {}
 
         ensure_key_pair("us-east-1", key_dir=key_dir)
         # Local key should be overwritten with SSM key
         assert key_path.read_text() == ssm_pem
         assert key_path.read_text() != old_content
+        # Store should NOT be called — fetch succeeded
+        mock_ssm.put_parameter.assert_not_called()
 
 
 def test_ensure_key_pair_skips_reimport_when_fingerprint_matches(tmp_path):
@@ -247,6 +255,9 @@ def test_ensure_key_pair_skips_reimport_when_fingerprint_matches(tmp_path):
 
     with patch("gsm.control.ssh.boto3") as mock_boto3:
         mock_ec2, mock_ssm = _mock_boto3_clients(mock_boto3)
+        # SSM has no key — local key gets uploaded
+        mock_ssm.get_parameter.side_effect = _client_error("ParameterNotFound")
+        mock_ssm.put_parameter.return_value = {}
         # EC2 key pair exists and fingerprint matches
         mock_ec2.describe_key_pairs.return_value = {
             "KeyPairs": [{"KeyFingerprint": local_fp}]
@@ -276,13 +287,13 @@ def test_ensure_key_pair_race_condition_converges(tmp_path):
         # First get_parameter: no key yet
         # Second get_parameter (after failed put): winner's key is there
         mock_ssm.get_parameter.side_effect = [
-            Exception("ParameterNotFound"),
+            _client_error("ParameterNotFound"),
             {"Parameter": {"Value": winner_pem}},
         ]
         # put_parameter fails (another machine stored first)
-        mock_ssm.put_parameter.side_effect = Exception("ParameterAlreadyExists")
+        mock_ssm.put_parameter.side_effect = _client_error("ParameterAlreadyExists")
         # EC2 has no key pair
-        mock_ec2.describe_key_pairs.side_effect = Exception("not found")
+        mock_ec2.describe_key_pairs.side_effect = _client_error("InvalidKeyPair.NotFound")
         mock_ec2.import_key_pair.return_value = {}
 
         key_path = ensure_key_pair("us-east-1", key_dir=key_dir)
